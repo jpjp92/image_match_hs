@@ -107,7 +107,8 @@ class ImageMatchingGame {
             return;
         }
 
-        let images = imageNumbers.flatMap(n => [`/static/images/${n}.jpg`, `//static/images/${n}.jpg`]);
+        
+        let images = imageNumbers.flatMap(n => [`/static/images/${n}.jpg`, `/static/images/${n}.jpg`]);
         this.shuffleArray(images);
 
         const gridColumns = this.getGridColumns();
