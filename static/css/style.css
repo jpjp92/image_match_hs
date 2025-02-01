@@ -1,0 +1,73 @@
+.game-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.controls {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 20px;
+    align-items: center;
+}
+
+.controls input,
+.controls select,
+.controls button {
+    padding: 10px;
+    font-size: 16px;
+}
+
+.game-board {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.card {
+    aspect-ratio: 1;
+    background-color: #ddd;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.card.flipped {
+    transform: rotateY(360deg);
+}
+
+.card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0; /* display: none 대신 opacity 사용 */
+    visibility: hidden; /* 추가 */
+}
+
+.card.flipped img {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.2s;
+}
+
+.card.flipped img {
+    display: block;
+}
+
+.leaderboard {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.leaderboard table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.leaderboard th,
+.leaderboard td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: center;
+}
