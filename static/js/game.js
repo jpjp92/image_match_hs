@@ -24,11 +24,25 @@ class ImageMatchingGame {
         this.statusLabel = document.getElementById('status');
         this.timerLabel = document.getElementById('timer');
         this.gameBoard = document.getElementById('gameBoard');
+        
+        // 리더보드 모달 관련 요소들
+        this.leaderboardModal = document.getElementById('leaderboardModal');
+        this.showLeaderboardButton = document.getElementById('showLeaderboard');
+        this.closeButton = document.querySelector('.close');
     }
 
     addEventListeners() {
         this.startButton.addEventListener('click', () => this.startGame());
         this.difficultySelect.addEventListener('change', (e) => this.changeDifficulty(e.target.value));
+        
+        // 리더보드 모달 이벤트 리스너들
+        this.showLeaderboardButton.addEventListener('click', () => this.showLeaderboard());
+        this.closeButton.addEventListener('click', () => this.hideLeaderboard());
+        window.addEventListener('click', (e) => {
+            if (e.target === this.leaderboardModal) {
+                this.hideLeaderboard();
+            }
+        });
     }
 
     preloadImages(imageNumbers) {
@@ -54,7 +68,6 @@ class ImageMatchingGame {
 
     changeDifficulty(difficulty) {
         this.mode = difficulty;
-        // 모든 모드 50초로 통일
         this.timeLimit = 60;
         this.remainingTime = this.timeLimit;
         this.updateTimer();
@@ -94,7 +107,7 @@ class ImageMatchingGame {
             return;
         }
 
-        let images = imageNumbers.flatMap(n => [`/static/images/${n}.jpg`, `/static/images/${n}.jpg`]);
+        let images = imageNumbers.flatMap(n => [`/static/images/${n}.jpg`, `//static/images/${n}.jpg`]);
         this.shuffleArray(images);
 
         const gridColumns = this.getGridColumns();
@@ -139,7 +152,7 @@ class ImageMatchingGame {
                 this.playerNameInput.disabled = true;
                 
                 this.statusLabel.textContent = '10초 후 게임이 시작됩니다.';
-                this.showCards(10000); // 모든 모드 10초 미리보기
+                this.showCards(10000);
 
                 this.remainingTime = this.timeLimit;
                 this.updateTimer();
@@ -237,7 +250,7 @@ class ImageMatchingGame {
         const difficultyMultiplier = {
             'easy': 1,
             'normal': 1.5,
-            'hard': 2.0  // 하드 모드 2배 보너스
+            'hard': 2.0
         }[this.mode];
         
         const finalScore = Math.max(0, 
@@ -266,10 +279,24 @@ class ImageMatchingGame {
             if (!response.ok) throw new Error('점수 저장 실패');
             
             await this.updateLeaderboard();
+            return true;
         } catch (error) {
             console.error('점수 저장 중 오류:', error);
             alert('점수 저장 중 오류가 발생했습니다.');
+            return false;
         }
+    }
+
+    showLeaderboard() {
+        this.updateLeaderboard().then(() => {
+            this.leaderboardModal.classList.add('show');
+            document.body.style.overflow = 'hidden';
+        });
+    }
+
+    hideLeaderboard() {
+        this.leaderboardModal.classList.remove('show');
+        document.body.style.overflow = '';
     }
 
     maskPlayerName(name) {
@@ -288,12 +315,18 @@ class ImageMatchingGame {
             const tbody = document.querySelector('#scoresTable tbody');
             tbody.innerHTML = '';
             
-            scores.forEach(score => {
+            scores.forEach((score, index) => {
                 const row = tbody.insertRow();
                 row.insertCell().textContent = this.maskPlayerName(score.player_name);
                 row.insertCell().textContent = score.score;
                 row.insertCell().textContent = score.difficulty;
                 row.insertCell().textContent = `${score.time_taken}초`;
+                
+                // 상위 3위까지 강조 표시
+                if (index < 3) {
+                    row.style.fontWeight = 'bold';
+                    row.style.backgroundColor = ['#fff9db', '#f8f9fa', '#f1f3f5'][index];
+                }
             });
         } catch (error) {
             console.error('리더보드 업데이트 중 오류:', error);
@@ -304,14 +337,21 @@ class ImageMatchingGame {
     endGame(success) {
         clearInterval(this.timer);
         this.gameStarted = false;
-        this.saveScore(success);
-        this.statusLabel.textContent = success ? 
-            '게임 성공! 모든 카드를 맞췄습니다.' : 
-            '게임 실패! 시간이 초과되었습니다.';
-
-        if (confirm('다시 하시겠습니까?')) {
-            this.completeReset();
-        }
+        this.saveScore(success).then(() => {
+            this.statusLabel.textContent = success ? 
+                '게임 성공! 모든 카드를 맞췄습니다.' : 
+                '게임 실패! 시간이 초과되었습니다.';
+            
+            // 게임 종료 시 자동으로 리더보드 표시
+            this.showLeaderboard();
+            
+            setTimeout(() => {
+                if (confirm('다시 하시겠습니까?')) {
+                    this.hideLeaderboard();
+                    this.completeReset();
+                }
+            }, 1000);
+        });
     }
 
     completeReset() {
