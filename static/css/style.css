@@ -26,24 +26,41 @@
     margin-bottom: 20px;
 }
 
+.game-board {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+    margin-bottom: 20px;
+    max-width: 800px; /* 게임 보드의 최대 너비 설정 */
+    margin: 0 auto;
+}
+
 .card {
-    aspect-ratio: 1;
+    width: 100%; /* 부모 컨테이너의 너비에 맞춤 */
+    height: 0; /* 높이를 0으로 설정 */
+    padding-bottom: 100%; /* padding-bottom을 100%로 설정하여 정사각형 유지 */
+    position: relative; /* 자식 요소의 위치 기준점 */
     background-color: #ddd;
     cursor: pointer;
     transition: transform 0.2s;
+}
+
+.card img {
+    position: absolute; /* 부모 요소 기준으로 위치 설정 */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    visibility: hidden;
 }
 
 .card.flipped {
     transform: rotateY(360deg);
 }
 
-.card img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    opacity: 0; /* display: none 대신 opacity 사용 */
-    visibility: hidden; /* 추가 */
-}
+
 
 .card.flipped img {
     opacity: 1;
