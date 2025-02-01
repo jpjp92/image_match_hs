@@ -18,6 +18,7 @@
             </select>
             
             <button id="startButton" type="button">게임 시작</button>
+            <button id="showLeaderboard" type="button">리더보드 보기</button>
         </form>
 
         <div id="gameStatus">
@@ -27,19 +28,27 @@
 
         <div id="gameBoard" class="game-board"></div>
 
-        <div id="leaderboard" class="leaderboard">
-            <h2>리더보드</h2>
-            <table id="scoresTable">
-                <thead>
-                    <tr>
-                        <th>플레이어</th>
-                        <th>점수</th>
-                        <th>난이도</th>
-                        <th>소요시간</th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
+        <!-- 모달 리더보드 -->
+        <div id="leaderboardModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>🏆 리더보드</h2>
+                    <span class="close">&times;</span>
+                </div>
+                <div class="modal-body">
+                    <table id="scoresTable">
+                        <thead>
+                            <tr>
+                                <th>플레이어</th>
+                                <th>점수</th>
+                                <th>난이도</th>
+                                <th>소요시간</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
 
