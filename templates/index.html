@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>동물 이미지 매칭 게임 🐶🎮</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="game-container">
+        <form id="gameForm" onsubmit="return false;" class="controls">
+            <label for="playerName">플레이어 이름:</label>
+            <input type="text" id="playerName" required>
+            
+            <label for="difficulty">난이도:</label>
+            <select id="difficulty">
+                <option value="easy">Easy</option>
+                <option value="normal" selected>Normal</option>
+                <option value="hard">Hard</option>
+            </select>
+            
+            <button id="startButton" type="button">게임 시작</button>
+        </form>
+
+        <div id="gameStatus">
+            <div id="status"></div>
+            <div id="timer"></div>
+        </div>
+
+        <div id="gameBoard" class="game-board"></div>
+
+        <div id="leaderboard" class="leaderboard">
+            <h2>리더보드</h2>
+            <table id="scoresTable">
+                <thead>
+                    <tr>
+                        <th>플레이어</th>
+                        <th>점수</th>
+                        <th>난이도</th>
+                        <th>소요시간</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+
+    <script src="/static/js/game.js"></script>
+</body>
+</html>
