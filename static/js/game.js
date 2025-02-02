@@ -256,7 +256,7 @@ class ImageMatchingGame {
         
         const finalScore = Math.max(0, 
             Math.floor((baseScore - timePenalty) * difficultyMultiplier));
-        return Math.min(100, finalScore); // 최대 100점으로 제한
+        return finalScore; 
     }
     
     async saveScore(success) {
