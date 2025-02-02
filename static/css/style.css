@@ -60,8 +60,6 @@
     transform: rotateY(360deg);
 }
 
-
-
 .card.flipped img {
     opacity: 1;
     visibility: visible;
@@ -71,8 +69,6 @@
 .card.flipped img {
     display: block;
 }
-
-
 
 /* 모달 스타일 */
 .modal {
@@ -95,7 +91,7 @@
 
 .modal-content {
     background-color: white;
-    margin: 15% auto;
+    margin: 8% auto;
     padding: 20px;
     border-radius: 8px;
     width: 80%;
