@@ -318,7 +318,8 @@ class ImageMatchingGame {
             
             scores.forEach((score, index) => {
                 const row = tbody.insertRow();
-                row.insertCell().textContent = this.maskPlayerName(score.player_name);
+                // row.insertCell().textContent = this.maskPlayerName(score.player_name);  // 주석 처리
+                row.insertCell().textContent = score.player_name;
                 row.insertCell().textContent = score.score;
                 row.insertCell().textContent = score.difficulty;
                 row.insertCell().textContent = `${score.time_taken}초`;
