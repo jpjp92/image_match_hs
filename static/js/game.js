@@ -246,8 +246,8 @@ class ImageMatchingGame {
 
     calculateScore(success, timeTaken) {
         if (!success) return 0;
-        const baseScore = 1000;
-        const timePenalty = timeTaken * 2;
+        const baseScore = 100; // 1000에서 100으로 변경
+        const timePenalty = timeTaken * 0.2; // 시간 패널티 비율 조정
         const difficultyMultiplier = {
             'easy': 1,
             'normal': 1.5,
@@ -256,9 +256,9 @@ class ImageMatchingGame {
         
         const finalScore = Math.max(0, 
             Math.floor((baseScore - timePenalty) * difficultyMultiplier));
-        return finalScore;
+        return Math.min(100, finalScore); // 최대 100점으로 제한
     }
-
+    
     async saveScore(success) {
         const timeTaken = Math.floor((Date.now() - this.gameStartTime) / 1000);
         const score = this.calculateScore(success, timeTaken);
