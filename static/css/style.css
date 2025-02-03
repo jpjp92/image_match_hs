@@ -138,19 +138,43 @@
 }
 
 /* 테이블 스타일 개선 */
+/* 순위 아이콘 스타일 */
+.rank-icon {
+    font-size: 18px;
+    font-weight: bold;
+    margin-right: 5px;
+}
+
+/* 리더보드 테이블 스타일 */
 #scoresTable {
     width: 100%;
     border-collapse: collapse;
     margin-top: 10px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
-#scoresTable th,
+/* 테이블 헤더 스타일 */
+#scoresTable th {
+    background-color: #f8f9fa;
+    font-weight: 600;
+    color: #333;
+    padding: 12px;
+    text-align: center;
+}
+
+/* 테이블 셀 스타일 */
 #scoresTable td {
     padding: 12px;
     text-align: center;
     border: 1px solid #eee;
 }
+
+/* 모든 행에 호버 효과 적용 */
+#scoresTable tr:hover {
+    background-color: #e8f0fe !important;
+    cursor: pointer;
+}
+
 
 #scoresTable th {
     background-color: #f8f9fa;
