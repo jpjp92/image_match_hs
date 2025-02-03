@@ -69,6 +69,8 @@
 .card.flipped img {
     display: block;
 }
+
+
 /* Medal and rank styles */
 .medal {
     font-size: 1.5em;
@@ -80,14 +82,13 @@
     font-size: 1.2em;
 }
 
-/* Player Info */
-.player-info {
-    display: flex;
-    align-items: center;
-    gap: 10px;
+/* Player name */
+#scoresTable td:nth-child(2) {
+    font-weight: 500;
+    color: #333;
+    text-align: left;
+    padding-left: 20px;
 }
-
-
 
 /* Score highlighting */
 .highlight-score {
