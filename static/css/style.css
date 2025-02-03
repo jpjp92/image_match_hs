@@ -28,6 +28,69 @@
     background-color: #e9ecef;
 }
 
+
+.game-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.controls {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 20px;
+    align-items: center;
+}
+
+.controls input,
+.controls select,
+.controls button {
+    padding: 10px;
+    font-size: 16px;
+}
+
+.game-board {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 10px;
+    margin-bottom: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.card {
+    width: 100%;
+    aspect-ratio: 1 / 1; /* 정사각형 유지 */
+    position: relative;
+    background-color: #ddd;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.card img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* 이미지 비율 유지 및 채우기 */
+    opacity: 0;
+    visibility: hidden;
+}
+
+.card.flipped {
+    transform: rotateY(360deg);
+}
+
+.card.flipped img {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.2s;
+}
+
+
+
+
 /* 리더보드 특화 스타일 추가 */
 
 /* 순위 강조 */
