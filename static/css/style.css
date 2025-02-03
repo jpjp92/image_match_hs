@@ -87,12 +87,7 @@
     gap: 10px;
 }
 
-.player-avatar {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background-color: #e0e0e0;
-}
+
 
 /* Score highlighting */
 .highlight-score {
