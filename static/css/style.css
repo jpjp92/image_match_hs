@@ -69,7 +69,52 @@
 .card.flipped img {
     display: block;
 }
+/* Medal and rank styles */
+.medal {
+    font-size: 1.5em;
+}
 
+.rank-number {
+    font-weight: bold;
+    color: #666;
+    font-size: 1.2em;
+}
+
+/* Player Info */
+.player-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.player-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #e0e0e0;
+}
+
+/* Score highlighting */
+.highlight-score {
+    font-weight: bold;
+    color: #2196F3;
+    font-size: 1.1em;
+}
+
+/* Table styles */
+#scoresTable td {
+    padding: 10px;
+    vertical-align: middle;
+}
+
+#scoresTable tr:hover {
+    background-color: #f5f5f5;
+    transition: background-color 0.2s ease;
+}
+
+#scoresTable tr.top-three {
+    font-weight: 500;
+}
 
 /* 모달 스타일 */
 .modal {
