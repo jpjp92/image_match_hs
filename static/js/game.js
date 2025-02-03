@@ -316,17 +316,45 @@ class ImageMatchingGame {
             const tbody = document.querySelector('#scoresTable tbody');
             tbody.innerHTML = '';
             
+            // 메달 이모지 정의
+            const medals = {
+                1: '🥇',
+                2: '🥈',
+                3: '🥉'
+            };
+            
             scores.forEach((score, index) => {
                 const row = tbody.insertRow();
-                // row.insertCell().textContent = this.maskPlayerName(score.player_name);  // 주석 처리
-                row.insertCell().textContent = score.player_name;
-                row.insertCell().textContent = score.score;
+                if (index < 3) {
+                    row.classList.add('top-three');
+                }
+                
+                // Rank column with medals/numbers
+                const rankCell = row.insertCell();
+                if (index < 3) {
+                    rankCell.innerHTML = `<span class="medal">${medals[index + 1]}</span>`;
+                } else {
+                    rankCell.innerHTML = `<span class="rank-number">${index + 1}</span>`;
+                }
+                
+                // Player info
+                const playerCell = row.insertCell();
+                playerCell.innerHTML = `
+                    <div class="player-info">
+                        <img src="/api/placeholder/40/40" class="player-avatar" alt="Player">
+                        <span>${score.player_name}</span>
+                    </div>`;
+                
+                // Score with highlighting
+                const scoreCell = row.insertCell();
+                scoreCell.innerHTML = `<span class="highlight-score">${score.score}</span>`;
+                
+                // Difficulty and time
                 row.insertCell().textContent = score.difficulty;
                 row.insertCell().textContent = `${score.time_taken}초`;
                 
-                // 상위 3위까지 강조 표시
+                // Add background color for top 3
                 if (index < 3) {
-                    row.style.fontWeight = 'bold';
                     row.style.backgroundColor = ['#fff9db', '#f8f9fa', '#f1f3f5'][index];
                 }
             });
