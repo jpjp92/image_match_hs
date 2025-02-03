@@ -337,7 +337,9 @@ class ImageMatchingGame {
                     rankCell.innerHTML = `<span class="rank-number">${index + 1}</span>`;
                 }
                 
-                
+                // Player name
+                const playerCell = row.insertCell();
+                playerCell.textContent = score.player_name;
                 
                 // Score with highlighting
                 const scoreCell = row.insertCell();
