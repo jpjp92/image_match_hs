@@ -1,4 +1,4 @@
-/* 기본 컨테이너 */
+/* 기본 컨테이너 및 컨트롤 */
 .game-container {
     width: 95%;
     max-width: 800px;
@@ -6,7 +6,6 @@
     padding: 15px;
 }
 
-/* 컨트롤 영역 */
 .controls {
     display: flex;
     gap: 15px;
@@ -27,9 +26,101 @@
     gap: 10px;
     margin-bottom: 20px;
     margin: 0 auto;
+    max-width: 800px;
 }
 
-/* 카드 스타일 */
+/* 기존 테이블 스타일 유지 */
+.medal {
+    font-size: 1.5em;
+}
+
+.rank-number {
+    font-weight: bold;
+    color: #666;
+    font-size: 1.2em;
+}
+
+#scoresTable td:nth-child(2) {
+    font-weight: 500;
+    color: #333;
+    text-align: left;
+    padding-left: 20px;
+}
+
+.highlight-score {
+    font-weight: bold;
+    color: #2196F3;
+    font-size: 1.1em;
+}
+
+#scoresTable {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+#scoresTable th {
+    background-color: #f8f9fa;
+    font-weight: 600;
+    color: #333;
+    padding: 12px;
+    text-align: center;
+}
+
+#scoresTable td {
+    padding: 12px;
+    text-align: center;
+    border: 1px solid #eee;
+}
+
+#scoresTable tr:hover {
+    background-color: #e8f0fe !important;
+    cursor: pointer;
+}
+
+#scoresTable tr:nth-child(even) {
+    background-color: #f8f9fa;
+}
+
+/* 반응형 미디어 쿼리 */
+@media (max-width: 767px) {
+    .controls {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .game-board {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 5px;
+    }
+    
+    .modal-content {
+        width: 95%;
+        padding: 15px;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+    .game-board {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+@media (min-width: 992px) {
+    .game-board {
+        grid-template-columns: repeat(5, 1fr);
+    }
+    
+    .controls input,
+    .controls select,
+    .controls button {
+        padding: 10px;
+        font-size: 16px;
+    }
+}
+
+/* 카드 및 모달 스타일 유지 */
 .card {
     width: 100%;
     height: 0;
@@ -38,7 +129,6 @@
     background-color: #ddd;
     cursor: pointer;
     transition: transform 0.2s;
-    border-radius: 8px;
 }
 
 .card img {
@@ -50,7 +140,6 @@
     object-fit: cover;
     opacity: 0;
     visibility: hidden;
-    border-radius: 8px;
 }
 
 .card.flipped {
@@ -64,7 +153,6 @@
     display: block;
 }
 
-/* 모달 스타일 */
 .modal {
     display: none;
     position: fixed;
@@ -88,7 +176,7 @@
     margin: 8% auto;
     padding: 20px;
     border-radius: 8px;
-    width: 90%;
+    width: 80%;
     max-width: 600px;
     position: relative;
     transform: translateY(-20px);
@@ -97,88 +185,4 @@
 
 .modal.show .modal-content {
     transform: translateY(0);
-}
-
-/* 리더보드 스타일 */
-#scoresTable {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 10px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-    font-size: 14px;
-}
-
-#scoresTable th {
-    background-color: #f8f9fa;
-    font-weight: 600;
-    color: #333;
-    padding: 10px;
-}
-
-#scoresTable td {
-    padding: 10px;
-    text-align: center;
-    border: 1px solid #eee;
-}
-
-/* 반응형 미디어 쿼리 */
-/* 모바일 */
-@media (max-width: 767px) {
-    .controls {
-        flex-direction: column;
-        gap: 10px;
-    }
-    
-    .game-board {
-        grid-template-columns: repeat(3, 1fr);
-        gap: 5px;
-    }
-    
-    .modal-content {
-        width: 95%;
-        margin: 5% auto;
-        padding: 15px;
-    }
-    
-    #scoresTable {
-        font-size: 12px;
-    }
-    
-    #scoresTable th,
-    #scoresTable td {
-        padding: 8px 5px;
-    }
-}
-
-/* 태블릿 */
-@media (min-width: 768px) and (max-width: 991px) {
-    .game-board {
-        grid-template-columns: repeat(4, 1fr);
-    }
-    
-    .controls {
-        flex-wrap: wrap;
-        justify-content: center;
-    }
-}
-
-/* 작은 데스크탑 */
-@media (min-width: 992px) and (max-width: 1199px) {
-    .game-board {
-        grid-template-columns: repeat(5, 1fr);
-    }
-}
-
-/* 큰 데스크탑 */
-@media (min-width: 1200px) {
-    .game-board {
-        grid-template-columns: repeat(5, 1fr);
-    }
-    
-    .controls input,
-    .controls select,
-    .controls button {
-        padding: 10px;
-        font-size: 16px;
-    }
 }
