@@ -1,16 +1,17 @@
 /* 기본 컨테이너 및 컨트롤 */
 .game-container {
-    
     max-width: 800px;
     margin: 0 auto;
     padding: 15px;
 }
+
 .controls {
     display: flex;
     gap: 15px;
     margin-bottom: 20px;
     align-items: center;
 }
+
 .controls input,
 .controls select,
 .controls button {
@@ -18,47 +19,46 @@
     font-size: 14px;
 }
 
-/* X 닫기 버튼 숨기기 */
-.modal-content .close,
-.modal .close,
-.close-button {
-    display: none !important;
-}
-
 /* 게임 보드 */
 .game-board {
     display: grid;
     gap: 10px;
-    margin-bottom: 20px;
     margin: 0 auto;
     max-width: 800px;
+    margin-bottom: 20px;
 }
-/* 기존 테이블 스타일 유지 */
+
+/* 리더보드 테이블 스타일 */
 .medal {
     font-size: 1.5em;
 }
+
 .rank-number {
     font-weight: bold;
     color: #666;
     font-size: 1.2em;
 }
-#scoresTable td:nth-child(2) {
-    font-weight: 500;
-    color: #333;
-    text-align: left;
-    padding-left: 20px;
-}
-.highlight-score {
-    font-weight: bold;
-    color: #2196F3;
-    font-size: 1.1em;
-}
+
 #scoresTable {
     width: 100%;
     border-collapse: collapse;
     margin-top: 10px;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
+
+#scoresTable td:nth-child(2) {
+    font-weight: 500;
+    color: #333;
+    text-align: left;
+    padding-left: 20px;
+}
+
+.highlight-score {
+    font-weight: bold;
+    color: #2196F3;
+    font-size: 1.1em;
+}
+
 #scoresTable th {
     background-color: #f8f9fa;
     font-weight: 600;
@@ -66,55 +66,23 @@
     padding: 12px;
     text-align: center;
 }
+
 #scoresTable td {
     padding: 12px;
     text-align: center;
     border: 1px solid #eee;
 }
+
 #scoresTable tr:hover {
     background-color: #e8f0fe !important;
     cursor: pointer;
 }
+
 #scoresTable tr:nth-child(even) {
     background-color: #f8f9fa;
 }
 
-/* 반응형 미디어 쿼리 */
-@media (max-width: 767px) {
-    .controls {
-        flex-direction: column;
-        gap: 10px;
-    }
-    
-    .game-board {
-        grid-template-columns: repeat(3, 1fr);
-        gap: 5px;
-    }
-    
-    .modal-content {
-        width: 95%;
-        padding: 15px;
-    }
-}
-@media (min-width: 768px) and (max-width: 991px) {
-    .game-board {
-        grid-template-columns: repeat(4, 1fr);
-    }
-}
-@media (min-width: 992px) {
-    .game-board {
-        grid-template-columns: repeat(5, 1fr);
-    }
-    
-    .controls input,
-    .controls select,
-    .controls button {
-        padding: 10px;
-        font-size: 16px;
-    }
-}
-
-/* 카드 및 모달 스타일 유지 */
+/* 카드 스타일 */
 .card {
     width: 100%;
     height: 0;
@@ -124,6 +92,7 @@
     cursor: pointer;
     transition: transform 0.2s;
 }
+
 .card img {
     position: absolute;
     top: 0;
@@ -134,15 +103,19 @@
     opacity: 0;
     visibility: hidden;
 }
+
 .card.flipped {
     transform: rotateY(360deg);
 }
+
 .card.flipped img {
     opacity: 1;
     visibility: visible;
     transition: opacity 0.2s;
     display: block;
 }
+
+/* 모달 스타일 */
 .modal {
     display: none;
     position: fixed;
@@ -155,10 +128,12 @@
     opacity: 0;
     transition: opacity 0.3s ease-in-out;
 }
+
 .modal.show {
     display: block;
     opacity: 1;
 }
+
 .modal-content {
     background-color: white;
     margin: 8% auto;
@@ -170,6 +145,69 @@
     transform: translateY(-20px);
     transition: transform 0.3s ease-in-out;
 }
+
 .modal.show .modal-content {
     transform: translateY(0);
+}
+
+/* 닫기 버튼 스타일 */
+.modal-content .close,
+.modal .close {
+    display: block;
+    position: absolute;
+    right: 15px;
+    top: 15px;
+    color: #666;
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+    padding: 5px 10px;
+}
+
+/* 반응형 스타일 */
+@media (max-width: 767px) {
+    .controls {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .game-board {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 5px;
+    }
+    
+    .modal-content {
+        margin: 5% auto;
+        width: 90%;
+        max-height: 90vh;
+        overflow-y: auto;
+    }
+    
+    #scoresTable {
+        font-size: 14px;
+    }
+    
+    #scoresTable td,
+    #scoresTable th {
+        padding: 8px 5px;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+    .game-board {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+@media (min-width: 992px) {
+    .game-board {
+        grid-template-columns: repeat(5, 1fr);
+    }
+    
+    .controls input,
+    .controls select,
+    .controls button {
+        padding: 10px;
+        font-size: 16px;
+    }
 }
