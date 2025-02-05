@@ -24,7 +24,7 @@ body {
 
 .controls {
     display: grid;
-    grid-template-columns: 2fr 1fr 1fr 1fr;
+    grid-template-columns: 1.2fr 1fr 1fr 1fr;
     gap: 16px;
     margin-bottom: 20px;
     align-items: center;
@@ -36,7 +36,7 @@ body {
 
 /* 입력 필드 스타일 */
 .player-name-input {
-    width: 100%;
+    width: 50%;
     padding: 12px 16px;
     border: 2px solid #e2e8f0;
     border-radius: 12px;
@@ -53,7 +53,7 @@ body {
 
 /* 난이도 선택 */
 .difficulty-select {
-    width: 100%;
+    width: 50%;
     padding: 12px 16px;
     border: 2px solid #e2e8f0;
     border-radius: 12px;
@@ -80,8 +80,8 @@ body {
     border: none;
     border-radius: 12px;
     padding: 12px 24px;
-    font-weight: 600;
-    font-size: 16px;
+    font-weight: 400;
+    font-size: 12px;
     cursor: pointer;
     transition: all 0.2s ease;
     display: inline-flex;
@@ -101,12 +101,12 @@ body {
 
 .start-button::before {
     content: "▶";
-    font-size: 14px;
+    font-size: 12px;
 }
 
 .leaderboard-button::before {
     content: "🏆";
-    font-size: 18px;
+    font-size: 12px;
 }
 
 /* 게임 상태 스타일 */
@@ -129,7 +129,7 @@ body {
     padding: 8px 16px;
     border-radius: 12px;
     font-weight: 600;
-    font-size: 18px;
+    font-size: 12px;
     display: inline-flex;
     align-items: center;
     gap: 8px;
