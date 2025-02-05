@@ -34,7 +34,7 @@ body {
 /* 입력 필드 */
 .player-name-input,
 .difficulty-select {
-    width: 100%;
+    width: 80%;
     padding: 12px 20px; /* 일관된 패딩 적용 */
     border: 2px solid #e2e8f0;
     border-radius: 12px;
