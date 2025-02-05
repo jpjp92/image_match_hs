@@ -36,7 +36,7 @@ body {
 
 /* 입력 필드 스타일 */
 .player-name-input {
-    width: 100%;
+    width: 80%;
     padding: 12px 16px;
     border: 2px solid #e2e8f0;
     border-radius: 12px;
