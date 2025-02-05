@@ -10,6 +10,10 @@ class ImageMatchingGame {
         this.totalImages = 15;
         this.preloadedImages = new Map();
         
+        // 모바일 기기 감지
+        this.isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+        this.touchStartY = 0;
+        
         document.addEventListener('DOMContentLoaded', () => {
             this.initializeElements();
             this.addEventListeners();
@@ -24,22 +28,44 @@ class ImageMatchingGame {
         this.statusLabel = document.getElementById('status');
         this.timerLabel = document.getElementById('timer');
         this.gameBoard = document.getElementById('gameBoard');
-        
-        // 리더보드 모달 관련 요소들
         this.leaderboardModal = document.getElementById('leaderboardModal');
         this.showLeaderboardButton = document.getElementById('showLeaderboard');
         this.closeButton = document.querySelector('.close');
+        
+        // 닫기 버튼 표시 설정
+        if (this.closeButton) {
+            this.closeButton.style.display = 'block';
+        }
     }
 
     addEventListeners() {
         this.startButton.addEventListener('click', () => this.startGame());
         this.difficultySelect.addEventListener('change', (e) => this.changeDifficulty(e.target.value));
-        
-        // 리더보드 모달 이벤트 리스너들
         this.showLeaderboardButton.addEventListener('click', () => this.showLeaderboard());
         this.closeButton.addEventListener('click', () => this.hideLeaderboard());
-        window.addEventListener('click', (e) => {
-            if (e.target === this.leaderboardModal) {
+        
+        // 모바일 터치 이벤트
+        if (this.isMobile) {
+            this.leaderboardModal.addEventListener('touchstart', (e) => {
+                this.touchStartY = e.touches[0].clientY;
+            });
+
+            this.leaderboardModal.addEventListener('touchmove', (e) => {
+                const touchEndY = e.touches[0].clientY;
+                const modalContent = this.leaderboardModal.querySelector('.modal-content');
+                
+                if (!modalContent.contains(e.target)) {
+                    if (Math.abs(touchEndY - this.touchStartY) > 50) {
+                        this.hideLeaderboard();
+                    }
+                }
+            });
+        }
+
+        // 모달 외부 클릭/터치 이벤트
+        this.leaderboardModal.addEventListener(this.isMobile ? 'touchend' : 'click', (e) => {
+            const modalContent = this.leaderboardModal.querySelector('.modal-content');
+            if (e.target === this.leaderboardModal && !modalContent.contains(e.target)) {
                 this.hideLeaderboard();
             }
         });
@@ -76,9 +102,9 @@ class ImageMatchingGame {
 
     getCardCount() {
         return {
-            'easy': 12,    // 4x3 = 12장
-            'normal': 20,  // 5x4 = 20장
-            'hard': 30     // 6x5 = 30장
+            'easy': 12,
+            'normal': 20,
+            'hard': 30
         }[this.mode];
     }
 
@@ -107,7 +133,6 @@ class ImageMatchingGame {
             return;
         }
 
-        
         let images = imageNumbers.flatMap(n => [`/static/images/${n}.jpg`, `/static/images/${n}.jpg`]);
         this.shuffleArray(images);
 
@@ -246,17 +271,15 @@ class ImageMatchingGame {
 
     calculateScore(success, timeTaken) {
         if (!success) return 0;
-        const baseScore = 100; // 1000에서 100으로 변경
-        const timePenalty = timeTaken * 0.2; // 시간 패널티 비율 조정
+        const baseScore = 100;
+        const timePenalty = timeTaken * 0.2;
         const difficultyMultiplier = {
             'easy': 1,
             'normal': 1.5,
             'hard': 2.0
         }[this.mode];
         
-        const finalScore = Math.max(0, 
-            Math.floor((baseScore - timePenalty) * difficultyMultiplier));
-        return finalScore; 
+        return Math.max(0, Math.floor((baseScore - timePenalty) * difficultyMultiplier));
     }
     
     async saveScore(success) {
@@ -292,12 +315,24 @@ class ImageMatchingGame {
         this.updateLeaderboard().then(() => {
             this.leaderboardModal.classList.add('show');
             document.body.style.overflow = 'hidden';
+            
+            // 모바일 스크롤 방지
+            if (this.isMobile) {
+                document.body.style.position = 'fixed';
+                document.body.style.width = '100%';
+            }
         });
     }
 
     hideLeaderboard() {
         this.leaderboardModal.classList.remove('show');
         document.body.style.overflow = '';
+        
+        // 모바일 스크롤 복원
+        if (this.isMobile) {
+            document.body.style.position = '';
+            document.body.style.width = '';
+        }
     }
 
     maskPlayerName(name) {
@@ -316,7 +351,6 @@ class ImageMatchingGame {
             const tbody = document.querySelector('#scoresTable tbody');
             tbody.innerHTML = '';
             
-            // 메달 이모지 정의
             const medals = {
                 1: '🥇',
                 2: '🥈',
@@ -329,7 +363,6 @@ class ImageMatchingGame {
                     row.classList.add('top-three');
                 }
                 
-                // Rank column with medals/numbers
                 const rankCell = row.insertCell();
                 if (index < 3) {
                     rankCell.innerHTML = `<span class="medal">${medals[index + 1]}</span>`;
@@ -337,19 +370,11 @@ class ImageMatchingGame {
                     rankCell.innerHTML = `<span class="rank-number">${index + 1}</span>`;
                 }
                 
-                // Player name
-                const playerCell = row.insertCell();
-                playerCell.textContent = score.player_name;
-                
-                // Score with highlighting
-                const scoreCell = row.insertCell();
-                scoreCell.innerHTML = `<span class="highlight-score">${score.score}</span>`;
-                
-                // Difficulty and time
+                row.insertCell().textContent = score.player_name;
+                row.insertCell().innerHTML = `<span class="highlight-score">${score.score}</span>`;
                 row.insertCell().textContent = score.difficulty;
                 row.insertCell().textContent = `${score.time_taken}초`;
                 
-                // Add background color for top 3
                 if (index < 3) {
                     row.style.backgroundColor = ['#fff9db', '#f8f9fa', '#f1f3f5'][index];
                 }
@@ -368,7 +393,6 @@ class ImageMatchingGame {
                 '게임 성공! 모든 카드를 맞췄습니다.' : 
                 '게임 실패! 시간이 초과되었습니다.';
             
-            // 게임 종료 시 자동으로 리더보드 표시
             this.showLeaderboard();
             
             setTimeout(() => {
