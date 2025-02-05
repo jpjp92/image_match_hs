@@ -36,7 +36,7 @@ body {
 
 /* 입력 필드 스타일 */
 .player-name-input {
-    width: 50%;
+    width: 70%;
     padding: 12px 16px;
     border: 2px solid #e2e8f0;
     border-radius: 12px;
@@ -53,7 +53,7 @@ body {
 
 /* 난이도 선택 */
 .difficulty-select {
-    width: 50%;
+    width: 70%;
     padding: 12px 16px;
     border: 2px solid #e2e8f0;
     border-radius: 12px;
@@ -184,7 +184,7 @@ body {
 }
 
 .card.flipped {
-    transform: rotateY(360deg);
+    transform: rotateY(180deg);
     background-color: white;
 }
 
@@ -217,7 +217,7 @@ body {
     background-color: white;
     margin: 4% auto;
     padding: 24px;
-    border-radius: 16px;
+    border-radius: 20px;
     width: 90%;
     max-width: 500px;
     position: relative;
@@ -266,9 +266,28 @@ body {
     border-collapse: separate;
     border-spacing: 0;
     background: white;
-    border-radius: 12px;
+    border-radius: 18px;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 }
+
+#scoresTable th:first-child {
+    border-top-left-radius: 18px; /* 첫 번째 헤더의 왼쪽 상단 모서리 */
+}
+
+#scoresTable th:last-child {
+    border-top-right-radius: 18px; /* 마지막 헤더의 오른쪽 상단 모서리 */
+}
+
+#scoresTable tr:last-child td:first-child {
+    border-bottom-left-radius: 18px; /* 마지막 행의 왼쪽 하단 모서리 */
+}
+
+#scoresTable tr:last-child td:last-child {
+    border-bottom-right-radius: 18px; /* 마지막 행의 오른쪽 하단 모서리 */
+}
+
+
+
 
 #scoresTable th {
     background-color: #4f46e5;
