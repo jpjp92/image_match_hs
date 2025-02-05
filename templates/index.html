@@ -6,30 +6,37 @@
 </head>
 <body>
     <div class="game-container">
-        <form id="gameForm" onsubmit="return false;" class="controls">
-            <label for="playerName">플레이어 이름:</label>
-            <input type="text" id="playerName" required>
+        <div class="game-header">
+            <form id="gameForm" onsubmit="return false;" class="controls">
+                <div class="input-group">
+                    <input type="text" id="playerName" class="player-name-input" 
+                           placeholder="플레이어 이름을 입력하세요" required>
+                </div>
+                
+                <div class="input-group">
+                    <select id="difficulty" class="difficulty-select">
+                        <option value="easy">Easy</option>
+                        <option value="normal" selected>Normal</option>
+                        <option value="hard">Hard</option>
+                    </select>
+                </div>
+                
+                <button id="startButton" type="button" class="game-button start-button">
+                    게임 시작
+                </button>
+                <button id="showLeaderboard" type="button" class="game-button leaderboard-button">
+                    리더보드
+                </button>
+            </form>
             
-            <label for="difficulty">난이도:</label>
-            <select id="difficulty">
-                <option value="easy">Easy</option>
-                <option value="normal" selected>Normal</option>
-                <option value="hard">Hard</option>
-            </select>
-            
-            <button id="startButton" type="button">게임 시작</button>
-            <button id="showLeaderboard" type="button">리더보드 확인</button>
-        </form>
-
-        <div id="gameStatus">
-            <div id="status"></div>
-            <div id="timer"></div>
+            <div id="gameStatus" class="game-status">
+                <div id="status" class="status-text"></div>
+                <div id="timer" class="time-display"></div>
+            </div>
         </div>
-
+        
         <div id="gameBoard" class="game-board"></div>
-
-        <!-- 모달 리더보드 -->
-        <!-- Updated Leaderboard Modal -->
+        
         <div id="leaderboardModal" class="modal">
             <div class="modal-content">
                 <div class="modal-header">
