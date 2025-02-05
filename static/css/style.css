@@ -51,23 +51,25 @@ body {
     outline: none;
 }
 
-/* 버튼 스타일 */
-.game-button,
+
+/* 남은 시간 표시 */
 .time-display {
     background-color: #4f46e5;
     color: white;
-    border: none;
     border-radius: 12px;
-    padding: 12px 20px; /* 일관된 패딩 */
-    font-weight: 500;
+    padding: 12px 20px;
+    font-weight: 600;
     font-size: 14px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
+    text-align: center;
+    width: auto;
+    max-width: 250px; /* 최대 너비 제한 */
 }
+
+
+
+
+
+
 
 /* 버튼 hover 효과 */
 .game-button:hover {
