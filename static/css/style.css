@@ -3,10 +3,10 @@ body {
     background-color: #f8fafc;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     color: #1e293b;
-    line-height: 1.5; /* 텍스트 가독성 향상 */
+    line-height: 1.5;
 }
 
-/* 기본 컨테이너 */
+/* 기본 컨테이너 및 컨트롤 */
 .game-container {
     max-width: 800px;
     margin: 2rem auto;
@@ -14,101 +14,142 @@ body {
 }
 
 .game-header {
-    width: 100%;
-    background: white;
+    background: linear-gradient(to right, #f8f9fa, #ffffff);
     border-radius: 16px;
-    padding: 20px;  /* 기존 24px -> 20px로 조정 */
+    padding: 24px;
     margin-bottom: 24px;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
 
-/* 컨트롤 그룹 */
 .controls {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); /* 반응형 조정 */
-    gap: 14px;
+    display: flex;
+    gap: 16px;
     margin-bottom: 20px;
     align-items: center;
+    flex-wrap: wrap;
 }
 
-/* 입력 필드 */
-.player-name-input,
+.input-group {
+    flex: 1;
+    min-width: 200px;
+}
+
+/* 입력 필드 스타일 */
+.player-name-input {
+    width: 100%;
+    padding: 12px 16px;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    font-size: 16px;
+    transition: all 0.2s ease;
+    background-color: white;
+}
+
+.player-name-input:focus {
+    border-color: #4f46e5;
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+    outline: none;
+}
+
+/* 난이도 선택 */
 .difficulty-select {
-    width: 80%;
-    padding: 12px 20px; /* 일관된 패딩 적용 */
+    width: 100%;
+    padding: 12px 36px 12px 16px;
     border: 2px solid #e2e8f0;
     border-radius: 12px;
     font-size: 16px;
     background-color: white;
-    transition: all 0.2s ease;
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%234f46e5'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 16px;
 }
 
-/* 포커스 효과 */
-.player-name-input:focus,
 .difficulty-select:focus {
     border-color: #4f46e5;
     box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
     outline: none;
 }
 
-
-/* 남은 시간 표시 */
-.time-display {
+/* 버튼 스타일 */
+.game-button {
     background-color: #4f46e5;
     color: white;
+    border: none;
     border-radius: 12px;
-    padding: 12px 20px;
+    padding: 12px 24px;
     font-weight: 600;
-    font-size: 14px;
-    text-align: center;
-    width: auto;
-    max-width: 250px; /* 최대 너비 제한 */
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
 }
 
-
-
-
-
-
-
-/* 버튼 hover 효과 */
 .game-button:hover {
     background-color: #4338ca;
     transform: translateY(-1px);
 }
 
-/* 남은 시간 표시 */
-.time-display {
-    font-weight: 600;
-    font-size: 14px;
+.game-button:active {
+    transform: translateY(0);
 }
 
-/* 아이콘 스타일 */
 .start-button::before {
     content: "▶";
+    font-size: 14px;
 }
 
 .leaderboard-button::before {
     content: "🏆";
+    font-size: 18px;
+}
+
+/* 게임 상태 스타일 */
+.game-status {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 16px;
+}
+
+.status-text {
+    font-size: 18px;
+    font-weight: 500;
+    color: #4f46e5;
+}
+
+.time-display {
+    background: #4f46e5;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 18px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
 }
 
 .time-display::before {
     content: "⏱";
-    font-size: 18px;
+    font-size: 20px;
 }
-
 
 /* 게임 보드 */
 .game-board {
-    width: 100%;
     display: grid;
     gap: 12px;
-    margin: 0 auto 24px;
-    padding: 24px;
+    margin: 0 auto;
+    max-width: 800px;
+    margin-bottom: 20px;
+    padding: 16px;
     background: white;
     border-radius: 16px;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-    grid-template-columns: repeat(5, 1fr);
 }
 
 /* 카드 스타일 */
@@ -142,7 +183,7 @@ body {
 }
 
 .card.flipped {
-    transform: rotateY(180deg);
+    transform: rotateY(360deg);
     background-color: white;
 }
 
@@ -150,6 +191,51 @@ body {
     opacity: 1;
     visibility: visible;
     transition: opacity 0.2s;
+}
+
+/* 리더보드 스타일 */
+#scoresTable {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+#scoresTable th {
+    background-color: #4f46e5;
+    color: white;
+    font-weight: 600;
+    padding: 16px;
+    text-align: center;
+}
+
+#scoresTable td {
+    padding: 14px;
+    text-align: center;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+#scoresTable tr:hover {
+    background-color: #f8fafc;
+}
+
+.medal {
+    font-size: 1.5em;
+}
+
+.rank-number {
+    font-weight: bold;
+    color: #4f46e5;
+    font-size: 1.2em;
+}
+
+.highlight-score {
+    font-weight: bold;
+    color: #4f46e5;
+    font-size: 1.1em;
 }
 
 /* 모달 스타일 */
@@ -175,16 +261,13 @@ body {
     background-color: white;
     margin: 4% auto;
     padding: 24px;
-    border-radius: 20px;
+    border-radius: 16px;
     width: 90%;
-    max-width: 500px;
+    max-width: 600px;
     position: relative;
     transform: translateY(-20px);
     transition: transform 0.3s ease-in-out;
     box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
-    max-height: 80vh;
-    display: flex;
-    flex-direction: column;
 }
 
 .modal-header {
@@ -200,11 +283,6 @@ body {
     font-size: 24px;
 }
 
-.modal-body {
-    overflow-y: auto;
-    max-height: calc(80vh - 100px);
-}
-
 .modal .close {
     color: #666;
     font-size: 28px;
@@ -218,73 +296,10 @@ body {
     color: #4f46e5;
 }
 
-/* 리더보드 스타일 */
-#scoresTable {
-    width: 100%;
-    border-collapse: separate;
-    border-spacing: 0;
-    background: white;
-    border-radius: 18px;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-}
-
-#scoresTable th:first-child {
-    border-top-left-radius: 18px; /* 첫 번째 헤더의 왼쪽 상단 모서리 */
-}
-
-#scoresTable th:last-child {
-    border-top-right-radius: 18px; /* 마지막 헤더의 오른쪽 상단 모서리 */
-}
-
-#scoresTable tr:last-child td:first-child {
-    border-bottom-left-radius: 18px; /* 마지막 행의 왼쪽 하단 모서리 */
-}
-
-#scoresTable tr:last-child td:last-child {
-    border-bottom-right-radius: 18px; /* 마지막 행의 오른쪽 하단 모서리 */
-}
-
-#scoresTable th {
-    background-color: #4f46e5;
-    color: white;
-    font-weight: 600;
-    padding: 14px;
-    text-align: center;
-    position: sticky;
-    top: 0;
-    z-index: 1;
-}
-
-#scoresTable td {
-    padding: 12px;
-    text-align: center;
-    border-bottom: 1px solid #e2e8f0;
-}
-
-#scoresTable tr:hover {
-    background-color: #f8fafc;
-}
-
-.medal {
-    font-size: 1.5em;
-}
-
-.rank-number {
-    font-weight: bold;
-    color: #4f46e5;
-    font-size: 1.2em;
-}
-
-.highlight-score {
-    font-weight: bold;
-    color: #4f46e5;
-    font-size: 1.1em;
-}
-
 /* 반응형 스타일 */
 @media (max-width: 767px) {
     .controls {
-        grid-template-columns: 1fr;
+        flex-direction: column;
         gap: 12px;
     }
     
@@ -296,19 +311,14 @@ body {
         width: 100%;
     }
     
-    .game-header,
-    .game-board {
-        padding: 16px;
-    }
-    
     .game-board {
         grid-template-columns: repeat(3, 1fr);
         gap: 8px;
+        padding: 12px;
     }
     
     .modal-content {
-        width: 95%;
-        margin: 2% auto;
+        margin: 5% auto;
         padding: 16px;
     }
     
@@ -322,19 +332,14 @@ body {
     }
 }
 
-@media (min-width: 768px) and (max-width: 1023px) {
-    .controls {
-        grid-template-columns: 2fr 1fr 1fr;
-        gap: 12px;
-    }
-    
-    .leaderboard-button {
-        grid-column: span 3;
-    }
-}
-
 @media (min-width: 768px) and (max-width: 881px) {
     .game-board {
         grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+@media (min-width: 882px) {
+    .game-board {
+        grid-template-columns: repeat(5, 1fr);
     }
 }
