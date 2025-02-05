@@ -1,84 +1,175 @@
+/* 전체 페이지 스타일 */
+body {
+    background-color: #f8fafc;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    color: #1e293b;
+    line-height: 1.5;
+}
+
 /* 기본 컨테이너 및 컨트롤 */
 .game-container {
-    max-width: 600px;
-    margin: 0 auto;
-    padding: 15px;
+    max-width: 700px;
+    margin: 2rem auto;
+    padding: 0 15px;
 }
+
+.game-header {
+    background: linear-gradient(to right, #f8f9fa, #ffffff);
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 24px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
 .controls {
     display: flex;
-    gap: 15px;
+    gap: 16px;
     margin-bottom: 20px;
     align-items: center;
+    flex-wrap: wrap;
 }
-.controls input,
-.controls select,
-.controls button {
-    padding: 8px;
+
+.input-group {
+    flex: 1;
+    min-width: 200px;
+}
+
+/* 입력 필드 스타일 */
+.player-name-input {
+    width: 100%;
+    padding: 12px 16px;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    font-size: 16px;
+    transition: all 0.2s ease;
+    background-color: white;
+}
+
+.player-name-input:focus {
+    border-color: #4f46e5;
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+    outline: none;
+}
+
+/* 난이도 선택 */
+.difficulty-select {
+    width: 100%;
+    padding: 12px 36px 12px 16px;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    font-size: 16px;
+    background-color: white;
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%234f46e5'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 16px;
+}
+
+.difficulty-select:focus {
+    border-color: #4f46e5;
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+    outline: none;
+}
+
+/* 버튼 스타일 */
+.game-button {
+    background-color: #4f46e5;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    padding: 12px 24px;
+    font-weight: 600;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.game-button:hover {
+    background-color: #4338ca;
+    transform: translateY(-1px);
+}
+
+.game-button:active {
+    transform: translateY(0);
+}
+
+.start-button::before {
+    content: "▶";
     font-size: 14px;
 }
+
+.leaderboard-button::before {
+    content: "🏆";
+    font-size: 18px;
+}
+
+/* 게임 상태 스타일 */
+.game-status {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 16px;
+}
+
+.status-text {
+    font-size: 18px;
+    font-weight: 500;
+    color: #4f46e5;
+}
+
+.time-display {
+    background: #4f46e5;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 18px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.time-display::before {
+    content: "⏱";
+    font-size: 20px;
+}
+
 /* 게임 보드 */
 .game-board {
     display: grid;
-    gap: 10px;
+    gap: 12px;
     margin: 0 auto;
-    max-width: 600px;
+    max-width: 800px;
     margin-bottom: 20px;
+    padding: 16px;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 }
-/* 리더보드 테이블 스타일 */
-.medal {
-    font-size: 1.5em;
-}
-.rank-number {
-    font-weight: bold;
-    color: #666;
-    font-size: 1.2em;
-}
-#scoresTable {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 10px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-}
-#scoresTable td:nth-child(2) {
-    font-weight: 500;
-    color: #333;
-    text-align: left;
-    padding-left: 20px;
-}
-.highlight-score {
-    font-weight: bold;
-    color: #2196F3;
-    font-size: 1.1em;
-}
-#scoresTable th {
-    background-color: #f8f9fa;
-    font-weight: 600;
-    color: #333;
-    padding: 12px;
-    text-align: center;
-}
-#scoresTable td {
-    padding: 12px;
-    text-align: center;
-    border: 1px solid #eee;
-}
-#scoresTable tr:hover {
-    background-color: #e8f0fe !important;
-    cursor: pointer;
-}
-#scoresTable tr:nth-child(even) {
-    background-color: #f8f9fa;
-}
+
 /* 카드 스타일 */
 .card {
     width: 100%;
     height: 0;
     padding-bottom: 100%;
     position: relative;
-    background-color: #ddd;
+    background-color: #e2e8f0;
     cursor: pointer;
-    transition: transform 0.2s;
+    transition: all 0.3s ease;
+    border-radius: 12px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
 .card img {
     position: absolute;
     top: 0;
@@ -88,16 +179,65 @@
     object-fit: cover;
     opacity: 0;
     visibility: hidden;
+    border-radius: 12px;
 }
+
 .card.flipped {
     transform: rotateY(360deg);
+    background-color: white;
 }
+
 .card.flipped img {
     opacity: 1;
     visibility: visible;
     transition: opacity 0.2s;
-    display: block;
 }
+
+/* 리더보드 스타일 */
+#scoresTable {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+#scoresTable th {
+    background-color: #4f46e5;
+    color: white;
+    font-weight: 600;
+    padding: 16px;
+    text-align: center;
+}
+
+#scoresTable td {
+    padding: 14px;
+    text-align: center;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+#scoresTable tr:hover {
+    background-color: #f8fafc;
+}
+
+.medal {
+    font-size: 1.5em;
+}
+
+.rank-number {
+    font-weight: bold;
+    color: #4f46e5;
+    font-size: 1.2em;
+}
+
+.highlight-score {
+    font-weight: bold;
+    color: #4f46e5;
+    font-size: 1.1em;
+}
+
 /* 모달 스타일 */
 .modal {
     display: none;
@@ -111,54 +251,75 @@
     opacity: 0;
     transition: opacity 0.3s ease-in-out;
 }
+
 .modal.show {
     display: block;
     opacity: 1;
 }
+
 .modal-content {
     background-color: white;
-    margin: 8% auto;
-    padding: 20px;
-    border-radius: 8px;
-    width: 80%;
+    margin: 4% auto;
+    padding: 24px;
+    border-radius: 16px;
+    width: 90%;
     max-width: 600px;
     position: relative;
     transform: translateY(-20px);
     transition: transform 0.3s ease-in-out;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
 }
-.modal.show .modal-content {
-    transform: translateY(0);
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
 }
-/* 닫기 버튼 스타일 */
-.modal-content .close,
-.modal .close {
-    display: block;
-    position: absolute;
-    right: 15px;
-    top: 15px;
-    color: #666;
+
+.modal-header h2 {
+    margin: 0;
+    color: #4f46e5;
     font-size: 24px;
+}
+
+.modal .close {
+    color: #666;
+    font-size: 28px;
     font-weight: bold;
     cursor: pointer;
-    padding: 5px 10px;
+    padding: 0 8px;
+    transition: color 0.2s;
 }
+
+.modal .close:hover {
+    color: #4f46e5;
+}
+
 /* 반응형 스타일 */
 @media (max-width: 767px) {
     .controls {
         flex-direction: column;
-        gap: 10px;
+        gap: 12px;
+    }
+    
+    .input-group {
+        width: 100%;
+    }
+    
+    .game-button {
+        width: 100%;
     }
     
     .game-board {
         grid-template-columns: repeat(3, 1fr);
-        gap: 5px;
+        gap: 8px;
+        padding: 12px;
     }
     
     .modal-content {
         margin: 5% auto;
-        width: 90%;
-        max-height: 90vh;
-        overflow-y: auto;
+        padding: 16px;
     }
     
     #scoresTable {
@@ -167,41 +328,18 @@
     
     #scoresTable td,
     #scoresTable th {
-        padding: 8px 5px;
-    }
-    
-    .game-container,
-    .game-board {
-        max-width: 100%;
+        padding: 10px 6px;
     }
 }
-@media (min-width: 768px) and (max-width: 991px) {
+
+@media (min-width: 768px) and (max-width: 881px) {
     .game-board {
         grid-template-columns: repeat(4, 1fr);
     }
-    
-    .game-container,
-    .game-board {
-        max-width: 500px;
-    }
 }
-@media (min-width: 992px) {
+
+@media (min-width: 882px) {
     .game-board {
         grid-template-columns: repeat(5, 1fr);
     }
-    
-    .controls input,
-    .controls select,
-    .controls button {
-        padding: 10px;
-        font-size: 16px;
-    }
-    
-    .game-container,
-    .game-board {
-        max-width: 600px;
-    }
 }
-
-
-
