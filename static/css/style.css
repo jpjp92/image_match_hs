@@ -148,7 +148,7 @@ body {
     max-width: 800px;
     margin-bottom: 0;
     padding: 16px;
-    background: white;
+    background: linear-gradient(to right, #f8f9fa, #ffffff);
     border-radius: 16px;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 }
