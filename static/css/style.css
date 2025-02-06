@@ -11,6 +11,8 @@ body {
     max-width: 900px;
     margin: 0.5rem auto 0;
     padding: 0 16px;
+    display: flex;          /* 추가 */
+    flex-direction: column; /* 추가 */
 /*     min-height: 60vh; /* 최소 높이를 화면의 60%로 설정 */ */
     max-height: 100vh; /* 최대 높이 제한 */
     gap: 0.5rem; /* 컴포넌트 간격 줄임 */
@@ -153,6 +155,7 @@ body {
     background: linear-gradient(to right, #f8f9fa, #ffffff);
     border-radius: 16px;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    flex:1 ;  /* 추가 */
 }
 
 /* 카드 스타일 */
