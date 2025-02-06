@@ -8,9 +8,9 @@ body {
 
 /* 기본 컨테이너 및 컨트롤 */
 .game-container {
-    max-width: 1000px;
+    max-width: 900px;
     margin: 0.5rem auto 0;
-    padding: 0 15px;
+    padding: 0 16px;
     min-height: 60vh; /* 최소 높이를 화면의 80%로 설정 */
 }
 
@@ -145,7 +145,7 @@ body {
     display: grid;
     gap: 12px;
     margin: 0 auto;
-    max-width: 1000px;
+    max-width: 900px;
     margin-bottom: 0;
     padding: 16px;
     background: linear-gradient(to right, #f8f9fa, #ffffff);
