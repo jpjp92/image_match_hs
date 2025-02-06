@@ -9,7 +9,7 @@ body {
 /* 기본 컨테이너 및 컨트롤 */
 .game-container {
     max-width: 800px;
-    margin: 2rem auto;
+    margin: 2rem auto 0;
     padding: 0 15px;
 }
 
@@ -24,7 +24,7 @@ body {
 .controls {
     display: flex;
     gap: 16px;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     align-items: center;
     flex-wrap: wrap;
 }
