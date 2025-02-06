@@ -9,7 +9,7 @@ body {
 /* 기본 컨테이너 및 컨트롤 */
 .game-container {
     max-width: 800px;
-    margin: 2rem auto 0;
+    margin: 0.5rem auto 0;
     padding: 0 15px;
 }
 
@@ -145,7 +145,7 @@ body {
     gap: 12px;
     margin: 0 auto;
     max-width: 800px;
-    margin-bottom: 2px;
+    margin-bottom: 0;
     padding: 16px;
     background: white;
     border-radius: 16px;
