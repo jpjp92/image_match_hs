@@ -11,6 +11,7 @@ body {
     max-width: 800px;
     margin: 0.5rem auto 0;
     padding: 0 15px;
+    min-height: 80vh; /* 최소 높이를 화면의 80%로 설정 */
 }
 
 .game-header {
