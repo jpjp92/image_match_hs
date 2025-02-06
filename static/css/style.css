@@ -317,13 +317,13 @@ body {
     }
     .game-container {
         margin: 0 auto;      /* 중앙 정렬 */
-        padding: 0.5rem;     /* 패딩 조정 */
+        padding: 2px;
     }
     .game-board {
         grid-template-columns: repeat(3, 1fr);
         gap: 8px;
         margin: 0 auto;      /* 중앙 정렬 */
-        padding: 5px;
+        padding: 2px;
     }
     
     .modal-content {
