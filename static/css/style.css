@@ -8,7 +8,7 @@ body {
 
 /* 기본 컨테이너 및 컨트롤 */
 .game-container {
-    max-width: 800px;
+    max-width: 1000px;
     margin: 0.5rem auto 0;
     padding: 0 15px;
     min-height: 60vh; /* 최소 높이를 화면의 80%로 설정 */
