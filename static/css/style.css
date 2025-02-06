@@ -145,7 +145,7 @@ body {
     display: grid;
     gap: 12px;
     margin: 0 auto;
-    max-width: 800px;
+    max-width: 1000px;
     margin-bottom: 0;
     padding: 16px;
     background: linear-gradient(to right, #f8f9fa, #ffffff);
