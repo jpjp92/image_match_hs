@@ -318,13 +318,13 @@ body {
     .game-container {
         margin: 0 auto;      /* 중앙 정렬 */
         padding: 1px;
-        min-height: 50vh;
+        min-height: 20vh;
     }
     .game-board {
         grid-template-columns: repeat(3, 1fr);
         gap: 4px;
         margin: 0 auto;      /* 중앙 정렬 */
-        min-height: 50vh;
+        min-height: 20vh;
         padding: 1px;
     }
     
