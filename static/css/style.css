@@ -189,7 +189,7 @@ body {
 }
 
 .card.flipped {
-    transform: rotateY(360deg);
+    transform: rotateY(180deg);
     background-color: white;
 }
 
@@ -319,13 +319,14 @@ body {
     .game-container {
         margin: 0 auto;      /* 중앙 정렬 */
         padding: 1px;
-        min-height: 20vh;
+        min-height: 100vh;
+        justify-content: space-between;
     }
     .game-board {
         grid-template-columns: repeat(3, 1fr);
         gap: 4px;
         margin: 0 auto;      /* 중앙 정렬 */
-        min-height: 20vh;
+        min-height: 100vh;
         padding: 1px;
     }
     
