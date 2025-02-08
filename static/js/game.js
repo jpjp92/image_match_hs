@@ -32,6 +32,7 @@ class ImageMatchingGame {
         this.showLeaderboardButton = document.getElementById('showLeaderboard');
         this.closeButton = document.querySelector('.close');
         
+        // 닫기 버튼 표시 설정
         if (this.closeButton) {
             this.closeButton.style.display = 'block';
         }
@@ -43,6 +44,7 @@ class ImageMatchingGame {
         this.showLeaderboardButton.addEventListener('click', () => this.showLeaderboard());
         this.closeButton.addEventListener('click', () => this.hideLeaderboard());
         
+        // 모바일 터치 이벤트
         if (this.isMobile) {
             this.leaderboardModal.addEventListener('touchstart', (e) => {
                 this.touchStartY = e.touches[0].clientY;
@@ -60,25 +62,13 @@ class ImageMatchingGame {
             });
         }
 
+        // 모달 외부 클릭/터치 이벤트
         this.leaderboardModal.addEventListener(this.isMobile ? 'touchend' : 'click', (e) => {
             const modalContent = this.leaderboardModal.querySelector('.modal-content');
             if (e.target === this.leaderboardModal && !modalContent.contains(e.target)) {
                 this.hideLeaderboard();
             }
         });
-    }
-
-    // 타이핑 효과 구현
-    async typeText(text, element = this.statusLabel, speed = 50) {
-        element.textContent = '';
-        element.classList.add('typing-effect');
-        
-        for (let char of text) {
-            element.textContent += char;
-            await new Promise(resolve => setTimeout(resolve, speed));
-        }
-        
-        element.classList.remove('typing-effect');
     }
 
     preloadImages(imageNumbers) {
@@ -139,7 +129,7 @@ class ImageMatchingGame {
             await this.preloadImages(imageNumbers);
         } catch (error) {
             console.error('이미지 프리로드 실패:', error);
-            await this.typeText('이미지 로드 중 오류가 발생했습니다.');
+            this.statusLabel.textContent = '이미지 로드 중 오류가 발생했습니다.';
             return;
         }
 
@@ -177,7 +167,7 @@ class ImageMatchingGame {
         }
 
         if (!this.gameStarted) {
-            await this.typeText('이미지를 불러오는 중...');
+            this.statusLabel.textContent = '이미지를 불러오는 중...';
             try {
                 await this.setupGameBoard();
                 this.gameStartTime = Date.now();
@@ -187,7 +177,7 @@ class ImageMatchingGame {
                 this.difficultySelect.disabled = true;
                 this.playerNameInput.disabled = true;
                 
-                await this.typeText('10초 후 게임이 시작됩니다.');
+                this.statusLabel.textContent = '10초 후 게임이 시작됩니다.';
                 this.showCards(10000);
 
                 this.remainingTime = this.timeLimit;
@@ -195,7 +185,7 @@ class ImageMatchingGame {
                 this.startTimer();
             } catch (error) {
                 console.error('게임 시작 중 오류:', error);
-                await this.typeText('게임 시작 중 오류가 발생했습니다.');
+                this.statusLabel.textContent = '게임 시작 중 오류가 발생했습니다.';
             }
         }
     }
@@ -218,7 +208,7 @@ class ImageMatchingGame {
                 card.classList.remove('flipped');
             }
         });
-        this.typeText('게임 시작!');
+        this.statusLabel.textContent = '게임 시작!';
     }
 
     flipCard(card, index) {
@@ -326,6 +316,7 @@ class ImageMatchingGame {
             this.leaderboardModal.classList.add('show');
             document.body.style.overflow = 'hidden';
             
+            // 모바일 스크롤 방지
             if (this.isMobile) {
                 document.body.style.position = 'fixed';
                 document.body.style.width = '100%';
@@ -337,10 +328,18 @@ class ImageMatchingGame {
         this.leaderboardModal.classList.remove('show');
         document.body.style.overflow = '';
         
+        // 모바일 스크롤 복원
         if (this.isMobile) {
             document.body.style.position = '';
             document.body.style.width = '';
         }
+    }
+
+    maskPlayerName(name) {
+        if (name.length <= 1) return name;
+        const firstChar = name.charAt(0);
+        const maskedPart = '*'.repeat(name.length - 1);
+        return firstChar + maskedPart;
     }
 
     async updateLeaderboard() {
@@ -386,24 +385,23 @@ class ImageMatchingGame {
         }
     }
 
-    async endGame(success) {
+    endGame(success) {
         clearInterval(this.timer);
         this.gameStarted = false;
-        await this.saveScore(success);
-        
-        const message = success ? 
-            '게임 성공! 모든 카드를 맞췄습니다.' : 
-            '게임 실패! 시간이 초과되었습니다.';
-        
-        await this.typeText(message);
-        this.showLeaderboard();
-        
-        setTimeout(() => {
-            if (confirm('다시 하시겠습니까?')) {
-                this.hideLeaderboard();
-                this.completeReset();
-            }
-        }, 1000);
+        this.saveScore(success).then(() => {
+            this.statusLabel.textContent = success ? 
+                '게임 성공! 모든 카드를 맞췄습니다.' : 
+                '게임 실패! 시간이 초과되었습니다.';
+            
+            this.showLeaderboard();
+            
+            setTimeout(() => {
+                if (confirm('다시 하시겠습니까?')) {
+                    this.hideLeaderboard();
+                    this.completeReset();
+                }
+            }, 1000);
+        });
     }
 
     completeReset() {
@@ -417,7 +415,6 @@ class ImageMatchingGame {
         this.setupGameBoard();
         this.remainingTime = this.timeLimit;
         this.updateTimer();
-        this.statusLabel.classList.remove('typing-effect');
         this.statusLabel.textContent = '';
     }
 }
