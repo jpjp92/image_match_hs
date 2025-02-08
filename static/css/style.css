@@ -12,7 +12,7 @@ body {
     margin: 0.5rem auto 0;
     padding: 0 16px;
    
-/*     min-height: 60vh; /* 최소 높이를 화면의 60%로 설정 */ */
+/*     min-height: 50vh; /* 최소 높이를 화면의 60%로 설정 */ */
     max-height: 50vh; /* 최대 높이 제한 */
     gap: 0.5rem; /* 컴포넌트 간격 줄임 */
 }
@@ -317,15 +317,15 @@ body {
     }
     .game-container {
         margin: 0 auto;      /* 중앙 정렬 */
-        padding: 2px;
-        min-height: 60vh;
+        padding: 1px;
+        min-height: 50vh;
     }
     .game-board {
         grid-template-columns: repeat(3, 1fr);
-        gap: 8px;
+        gap: 4px;
         margin: 0 auto;      /* 중앙 정렬 */
-        min-height: 60vh;
-        padding: 2px;
+        min-height: 50vh;
+        padding: 1px;
     }
     
     .modal-content {
