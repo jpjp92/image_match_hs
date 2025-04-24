@@ -99,7 +99,7 @@ class ImageMatchingGame {
                 img.onerror = () => {
                     console.error(`Failed to load image: ${n}.jpg`);
                     const fallbackImg = new Image();
-                    fallbackImg.src = '/static/images/1.jpg';
+                    fallbackImg.src = '/static/images/fallback.jpg'; // 대체 이미지
                     this.preloadedImages.set(`/static/images/${n}.jpg`, fallbackImg);
                     resolve(fallbackImg);
                 };
@@ -158,7 +158,11 @@ class ImageMatchingGame {
             return;
         }
 
-        let images = imageNumbers.flatMap(n => [`/static/images/${n}.jpg`, `//static/images/${n}.jpg`]);
+        let images = [];
+        imageNumbers.forEach(n => {
+            images.push(`/static/images/${n}.jpg`);
+            images.push(`/static/images/${n}.jpg`);
+        });
         this.shuffleArray(images);
 
         const gridColumns = this.getGridColumns();
@@ -174,20 +178,18 @@ class ImageMatchingGame {
                 cachedImg.src = img;
                 cachedImg.onerror = () => {
                     console.error(`Failed to load image: ${img}`);
-                    cachedImg.src = '/static/images/1.jpg';
+                    cachedImg.src = '/static/images/fallback.jpg';
                 };
             }
             
             card.appendChild(cachedImg);
             
-            // 터치/클릭 이벤트 통합 처리
             const handleCardInteraction = (e) => {
                 e.preventDefault();
                 if (!this.gameStarted) return;
                 this.flipCard(card, index);
             };
             
-            // 모바일과 데스크톱 모두 이벤트 리스너 추가
             card.addEventListener('click', handleCardInteraction);
             card.addEventListener('touchend', handleCardInteraction, { passive: false });
             
@@ -287,6 +289,7 @@ class ImageMatchingGame {
             const j = Math.floor(Math.random() * (i + 1));
             [array[i], array[j]] = [array[j], array[i]];
         }
+        return array;
     }
 
     startTimer() {
@@ -315,15 +318,12 @@ class ImageMatchingGame {
             'hard': 2.0
         }[this.mode];
         
-        return (baseScore - timePenalty) * difficultyMultiplier; // 소수점 유지
+        return (baseScore - timePenalty) * difficultyMultiplier;
     }
     
     async saveScore(success) {
         const timeTaken = Math.floor((Date.now() - this.gameStartTime) / 1000);
-        // const score = this.calculateScore(success, timeTaken);
         let score = this.calculateScore(success, timeTaken);
-    
-        // 점수를 반올림하여 정수로 변환
         score = Math.round(score);
         try {
             const response = await fetch('/api/scores', {
@@ -355,7 +355,6 @@ class ImageMatchingGame {
             this.leaderboardModal.classList.add('show');
             document.body.style.overflow = 'hidden';
             
-            // 모바일 스크롤 방지
             if (this.isMobile) {
                 document.body.style.position = 'fixed';
                 document.body.style.width = '100%';
@@ -367,7 +366,6 @@ class ImageMatchingGame {
     hideLeaderboard() {
         this.leaderboardModal.classList.remove('show');
         
-        // 모바일 스크롤 복원
         if (this.isMobile) {
             const scrollY = document.body.style.top;
             document.body.style.position = '';
@@ -393,12 +391,11 @@ class ImageMatchingGame {
             
             let scores = await response.json();
             
-            // 점수 내림차순, 점수가 같으면 시간 오름차순으로 정렬
             scores.sort((a, b) => {
                 if (b.score !== a.score) {
-                    return b.score - a.score; // 점수 내림차순
+                    return b.score - a.score;
                 }
-                return a.time_taken - b.time_taken; // 시간이 적은 순 (오름차순)
+                return a.time_taken - b.time_taken;
             });
 
             const tbody = document.querySelector('#scoresTable tbody');
@@ -424,7 +421,7 @@ class ImageMatchingGame {
                 }
                 
                 row.insertCell().textContent = score.player_name;
-                row.insertCell().innerHTML = `<span class="highlight-score">${Math.floor(score.score)}</span>`; // 표시할 때만 소수점 제거
+                row.insertCell().innerHTML = `<span class="highlight-score">${Math.floor(score.score)}</span>`;
                 row.insertCell().textContent = score.difficulty;
                 row.insertCell().textContent = `${score.time_taken}초`;
                 
@@ -472,5 +469,4 @@ class ImageMatchingGame {
     }
 }
 
-// 게임 인스턴스 생성
 const game = new ImageMatchingGame();
