@@ -26,13 +26,21 @@ class ImageMatchingGame {
     // 뷰포트 높이를 동적으로 설정하는 메서드
     setViewportHeight() {
         const setVh = () => {
-            const vh = window.innerHeight * 0.01;
+            let vh;
+            if ('visualViewport' in window) {
+                vh = window.visualViewport.height * 0.01;
+            } else {
+                vh = window.innerHeight * 0.01;
+            }
             document.documentElement.style.setProperty('--vh', `${vh}px`);
         };
 
         setVh();
         window.addEventListener('resize', setVh);
         window.addEventListener('orientationchange', setVh);
+        if ('visualViewport' in window) {
+            window.visualViewport.addEventListener('resize', setVh);
+        }
     }
 
     // 게임 보드의 최대 높이를 동적으로 설정
@@ -43,7 +51,12 @@ class ImageMatchingGame {
             if (gameHeader && gameBoard) {
                 const headerRect = gameHeader.getBoundingClientRect();
                 const headerHeight = headerRect.height;
-                const availableHeight = window.innerHeight - headerHeight - 10; // 여유 공간 10px
+                let availableHeight;
+                if ('visualViewport' in window) {
+                    availableHeight = window.visualViewport.height - headerHeight - 15;
+                } else {
+                    availableHeight = window.innerHeight - headerHeight - 15;
+                }
                 gameBoard.style.maxHeight = `${availableHeight}px`;
                 console.log(`Header Height: ${headerHeight}px, Available Height: ${availableHeight}px`);
             }
@@ -52,6 +65,9 @@ class ImageMatchingGame {
         setHeight();
         window.addEventListener('resize', setHeight);
         window.addEventListener('orientationchange', setHeight);
+        if ('visualViewport' in window) {
+            window.visualViewport.addEventListener('resize', setHeight);
+        }
     }
 
     initializeElements() {
@@ -254,14 +270,18 @@ class ImageMatchingGame {
     initialize() {
         this.selectedCards = [];
         this.matchedCards = [];
-        clearInterval(this.timer); // 중복 타이머 방지
+        clearInterval(this.timer);
         this.timer = null;
     }
 
     showCards(duration) {
         const cards = document.querySelectorAll('.card');
         cards.forEach(card => card.classList.add('flipped'));
-        setTimeout(() => this.hideCards(), duration);
+        console.log('Cards shown for 10 seconds');
+        setTimeout(() => {
+            this.hideCards();
+            console.log('Cards hidden after 10 seconds');
+        }, duration);
     }
 
     hideCards() {
@@ -319,9 +339,10 @@ class ImageMatchingGame {
 
     startTimer() {
         if (this.timer) {
-            clearInterval(this.timer); // 기존 타이머 제거
+            clearInterval(this.timer);
         }
         this.timer = setInterval(() => {
+            console.log(`Remaining Time: ${this.remainingTime}`);
             if (this.remainingTime > 0) {
                 this.remainingTime--;
                 this.updateTimer();
