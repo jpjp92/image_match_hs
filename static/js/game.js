@@ -14,10 +14,31 @@ class ImageMatchingGame {
         this.isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
         this.touchStartY = 0;
         
+        // 화면 크기에 따른 처리
+        this.resizeObserver = null;
+        
         document.addEventListener('DOMContentLoaded', () => {
             this.initializeElements();
             this.addEventListeners();
             this.setupGameBoard();
+            this.setupResizeObserver();
+            
+            // 초기 타이머 표시
+            this.updateTimer();
+            
+            // 모바일에서 더블탭 확대 방지
+            document.addEventListener('touchstart', function(event) {
+                if (event.touches.length > 1) {
+                    event.preventDefault();
+                }
+            }, { passive: false });
+            
+            // 핀치 줌 방지
+            document.addEventListener('touchmove', function(event) {
+                if (event.scale !== 1) {
+                    event.preventDefault();
+                }
+            }, { passive: false });
         });
     }
 
@@ -48,7 +69,7 @@ class ImageMatchingGame {
         if (this.isMobile) {
             this.leaderboardModal.addEventListener('touchstart', (e) => {
                 this.touchStartY = e.touches[0].clientY;
-            });
+            }, { passive: true });
 
             this.leaderboardModal.addEventListener('touchmove', (e) => {
                 const touchEndY = e.touches[0].clientY;
@@ -59,7 +80,7 @@ class ImageMatchingGame {
                         this.hideLeaderboard();
                     }
                 }
-            });
+            }, { passive: true });
         }
 
         // 모달 외부 클릭/터치 이벤트
@@ -69,6 +90,41 @@ class ImageMatchingGame {
                 this.hideLeaderboard();
             }
         });
+        
+        // 화면 방향 변경 대응
+        window.addEventListener('orientationchange', () => {
+            setTimeout(() => {
+                this.adjustGameBoardLayout();
+            }, 200);
+        });
+    }
+    
+    setupResizeObserver() {
+        // ResizeObserver를 사용하여 화면 크기 변화에 대응
+        if (window.ResizeObserver) {
+            this.resizeObserver = new ResizeObserver(entries => {
+                for (let entry of entries) {
+                    if (entry.target === this.gameBoard) {
+                        this.adjustGameBoardLayout();
+                    }
+                }
+            });
+            
+            this.resizeObserver.observe(this.gameBoard);
+        } else {
+            // ResizeObserver를 지원하지 않는 브라우저를 위한 대체 처리
+            window.addEventListener('resize', () => {
+                this.adjustGameBoardLayout();
+            });
+        }
+    }
+    
+    adjustGameBoardLayout() {
+        const cardCount = this.getCardCount();
+        const width = window.innerWidth;
+        const columns = this.getGridColumns();
+        
+        this.gameBoard.style.gridTemplateColumns = `repeat(${columns}, 1fr)`;
     }
 
     preloadImages(imageNumbers) {
@@ -109,11 +165,21 @@ class ImageMatchingGame {
     }
 
     getGridColumns() {
-        return {
-            'easy': 4,
-            'normal': 5,
-            'hard': 6
-        }[this.mode];
+        const width = window.innerWidth;
+        
+        if (width < 480) {
+            return 3; // 작은 화면에서는 3열
+        } else if (width < 768) {
+            return 4; // 태블릿에서는 4열
+        } else if (width < 992) {
+            return 5; // 중간 크기 화면에서는 5열
+        } else {
+            return {
+                'easy': 4,
+                'normal': 5,
+                'hard': 6
+            }[this.mode]; // 기본 설정
+        }
     }
 
     async setupGameBoard() {
@@ -133,7 +199,7 @@ class ImageMatchingGame {
             return;
         }
 
-        let images = imageNumbers.flatMap(n => [`/static/images/${n}.jpg`, `/static/images/${n}.jpg`]);
+        let images = imageNumbers.flatMap(n => [`/static/images/${n}.jpg`, `//static/images/${n}.jpg`]);
         this.shuffleArray(images);
 
         const gridColumns = this.getGridColumns();
@@ -154,9 +220,22 @@ class ImageMatchingGame {
             }
             
             card.appendChild(cachedImg);
-            card.addEventListener('click', () => this.flipCard(card, index));
+            
+            // Touch와 click 이벤트 처리
+            if (this.isMobile) {
+                card.addEventListener('touchend', (e) => {
+                    e.preventDefault(); // 더블탭 방지
+                    this.flipCard(card, index);
+                });
+            } else {
+                card.addEventListener('click', () => this.flipCard(card, index));
+            }
+            
             this.gameBoard.appendChild(card);
         });
+        
+        // 게임보드 레이아웃 조정
+        this.adjustGameBoardLayout();
     }
 
     async startGame() {
@@ -279,13 +358,15 @@ class ImageMatchingGame {
             'hard': 2.0
         }[this.mode];
         
-        return Math.max(0, Math.floor((baseScore - timePenalty) * difficultyMultiplier));
+        return (baseScore - timePenalty) * difficultyMultiplier; // 소수점 유지
     }
     
     async saveScore(success) {
         const timeTaken = Math.floor((Date.now() - this.gameStartTime) / 1000);
-        const score = this.calculateScore(success, timeTaken);
-
+        let score = this.calculateScore(success, timeTaken);
+    
+        // 점수를 반올림하여 정수로 변환
+        score = Math.round(score);
         try {
             const response = await fetch('/api/scores', {
                 method: 'POST',
@@ -320,19 +401,24 @@ class ImageMatchingGame {
             if (this.isMobile) {
                 document.body.style.position = 'fixed';
                 document.body.style.width = '100%';
+                document.body.style.top = `-${window.scrollY}px`;
             }
         });
     }
 
     hideLeaderboard() {
         this.leaderboardModal.classList.remove('show');
-        document.body.style.overflow = '';
         
         // 모바일 스크롤 복원
         if (this.isMobile) {
+            const scrollY = document.body.style.top;
             document.body.style.position = '';
             document.body.style.width = '';
+            document.body.style.top = '';
+            window.scrollTo(0, parseInt(scrollY || '0') * -1);
         }
+        
+        document.body.style.overflow = '';
     }
 
     maskPlayerName(name) {
@@ -347,7 +433,16 @@ class ImageMatchingGame {
             const response = await fetch('/api/scores');
             if (!response.ok) throw new Error('리더보드 데이터 가져오기 실패');
             
-            const scores = await response.json();
+            let scores = await response.json();
+            
+            // 점수 내림차순, 점수가 같으면 시간 오름차순으로 정렬
+            scores.sort((a, b) => {
+                if (b.score !== a.score) {
+                    return b.score - a.score; // 점수 내림차순
+                }
+                return a.time_taken - b.time_taken; // 시간이 적은 순 (오름차순)
+            });
+
             const tbody = document.querySelector('#scoresTable tbody');
             tbody.innerHTML = '';
             
@@ -371,7 +466,7 @@ class ImageMatchingGame {
                 }
                 
                 row.insertCell().textContent = score.player_name;
-                row.insertCell().innerHTML = `<span class="highlight-score">${score.score}</span>`;
+                row.insertCell().innerHTML = `<span class="highlight-score">${Math.floor(score.score)}</span>`; // 표시할 때만 소수점 제거
                 row.insertCell().textContent = score.difficulty;
                 row.insertCell().textContent = `${score.time_taken}초`;
                 
