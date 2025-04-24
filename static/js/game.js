@@ -18,7 +18,23 @@ class ImageMatchingGame {
             this.initializeElements();
             this.addEventListeners();
             this.setupGameBoard();
+            this.setViewportHeight(); // 뷰포트 높이 설정 추가
         });
+    }
+
+    // 뷰포트 높이를 동적으로 설정하는 메서드
+    setViewportHeight() {
+        const setVh = () => {
+            const vh = window.innerHeight * 0.01;
+            document.documentElement.style.setProperty('--vh', `${vh}px`);
+        };
+
+        // 초기 설정
+        setVh();
+
+        // 창 크기 변경 시 업데이트
+        window.addEventListener('resize', setVh);
+        window.addEventListener('orientationchange', setVh);
     }
 
     initializeElements() {
@@ -32,7 +48,6 @@ class ImageMatchingGame {
         this.showLeaderboardButton = document.getElementById('showLeaderboard');
         this.closeButton = document.querySelector('.close');
         
-        // 닫기 버튼 표시 설정
         if (this.closeButton) {
             this.closeButton.style.display = 'block';
         }
@@ -42,18 +57,14 @@ class ImageMatchingGame {
         this.startButton.addEventListener('click', () => this.startGame());
         this.difficultySelect.addEventListener('change', (e) => this.changeDifficulty(e.target.value));
         this.showLeaderboardButton.addEventListener('click', () => this.showLeaderboard());
-        if (this.closeButton) {
-            this.closeButton.addEventListener('click', () => this.hideLeaderboard());
-        }
+        this.closeButton.addEventListener('click', () => this.hideLeaderboard());
         
-        // 전체 문서에 확대/축소 방지 이벤트 추가
         document.addEventListener('touchmove', function(e) {
             if (!e.target.closest('.modal-content')) {
                 e.preventDefault();
             }
         }, { passive: false });
         
-        // 더블 탭 확대 방지
         document.addEventListener('touchend', function(e) {
             const now = Date.now();
             const DOUBLE_PRESS_DELAY = 300;
@@ -63,8 +74,7 @@ class ImageMatchingGame {
             this.lastTap = now;
         }.bind(this), false);
         
-        // 모바일 터치 이벤트
-        if (this.isMobile && this.leaderboardModal) {
+        if (this.isMobile) {
             this.leaderboardModal.addEventListener('touchstart', (e) => {
                 this.touchStartY = e.touches[0].clientY;
             });
@@ -73,7 +83,7 @@ class ImageMatchingGame {
                 const touchEndY = e.touches[0].clientY;
                 const modalContent = this.leaderboardModal.querySelector('.modal-content');
                 
-                if (modalContent && !modalContent.contains(e.target)) {
+                if (!modalContent.contains(e.target)) {
                     if (Math.abs(touchEndY - this.touchStartY) > 50) {
                         this.hideLeaderboard();
                     }
@@ -81,15 +91,12 @@ class ImageMatchingGame {
             });
         }
 
-        // 모달 외부 클릭/터치 이벤트
-        if (this.leaderboardModal) {
-            this.leaderboardModal.addEventListener(this.isMobile ? 'touchend' : 'click', (e) => {
-                const modalContent = this.leaderboardModal.querySelector('.modal-content');
-                if (e.target === this.leaderboardModal && modalContent && !modalContent.contains(e.target)) {
-                    this.hideLeaderboard();
-                }
-            });
-        }
+        this.leaderboardModal.addEventListener(this.isMobile ? 'touchend' : 'click', (e) => {
+            const modalContent = this.leaderboardModal.querySelector('.modal-content');
+            if (e.target === this.leaderboardModal && !modalContent.contains(e.target)) {
+                this.hideLeaderboard();
+            }
+        });
     }
 
     preloadImages(imageNumbers) {
@@ -103,7 +110,7 @@ class ImageMatchingGame {
                 img.onerror = () => {
                     console.error(`Failed to load image: ${n}.jpg`);
                     const fallbackImg = new Image();
-                    fallbackImg.src = '/static/images/1.jpg';
+                    fallbackImg.src = '/static/images/fallback.jpg';
                     this.preloadedImages.set(`/static/images/${n}.jpg`, fallbackImg);
                     resolve(fallbackImg);
                 };
@@ -162,8 +169,11 @@ class ImageMatchingGame {
             return;
         }
 
-        // 여기가 문제의 부분: //static/images/ -> /static/images/로 수정
-        let images = imageNumbers.flatMap(n => [`/static/images/${n}.jpg`, `/static/images/${n}.jpg`]);
+        let images = [];
+        imageNumbers.forEach(n => {
+            images.push(`/static/images/${n}.jpg`);
+            images.push(`/static/images/${n}.jpg`);
+        });
         this.shuffleArray(images);
 
         const gridColumns = this.getGridColumns();
@@ -179,20 +189,18 @@ class ImageMatchingGame {
                 cachedImg.src = img;
                 cachedImg.onerror = () => {
                     console.error(`Failed to load image: ${img}`);
-                    cachedImg.src = '/static/images/1.jpg';
+                    cachedImg.src = '/static/images/fallback.jpg';
                 };
             }
             
             card.appendChild(cachedImg);
             
-            // 터치/클릭 이벤트 통합 처리
             const handleCardInteraction = (e) => {
                 e.preventDefault();
                 if (!this.gameStarted) return;
                 this.flipCard(card, index);
             };
             
-            // 모바일과 데스크톱 모두 이벤트 리스너 추가
             card.addEventListener('click', handleCardInteraction);
             card.addEventListener('touchend', handleCardInteraction, { passive: false });
             
@@ -292,6 +300,7 @@ class ImageMatchingGame {
             const j = Math.floor(Math.random() * (i + 1));
             [array[i], array[j]] = [array[j], array[i]];
         }
+        return array;
     }
 
     startTimer() {
@@ -320,14 +329,12 @@ class ImageMatchingGame {
             'hard': 2.0
         }[this.mode];
         
-        return (baseScore - timePenalty) * difficultyMultiplier; // 소수점 유지
+        return (baseScore - timePenalty) * difficultyMultiplier;
     }
     
     async saveScore(success) {
         const timeTaken = Math.floor((Date.now() - this.gameStartTime) / 1000);
         let score = this.calculateScore(success, timeTaken);
-    
-        // 점수를 반올림하여 정수로 변환
         score = Math.round(score);
         try {
             const response = await fetch('/api/scores', {
@@ -356,35 +363,29 @@ class ImageMatchingGame {
 
     showLeaderboard() {
         this.updateLeaderboard().then(() => {
-            if (this.leaderboardModal) {
-                this.leaderboardModal.classList.add('show');
-                document.body.style.overflow = 'hidden';
-                
-                // 모바일 스크롤 방지
-                if (this.isMobile) {
-                    document.body.style.position = 'fixed';
-                    document.body.style.width = '100%';
-                    document.body.style.top = `-${window.scrollY}px`;
-                }
+            this.leaderboardModal.classList.add('show');
+            document.body.style.overflow = 'hidden';
+            
+            if (this.isMobile) {
+                document.body.style.position = 'fixed';
+                document.body.style.width = '100%';
+                document.body.style.top = `-${window.scrollY}px`;
             }
         });
     }
 
     hideLeaderboard() {
-        if (this.leaderboardModal) {
-            this.leaderboardModal.classList.remove('show');
-            
-            // 모바일 스크롤 복원
-            if (this.isMobile) {
-                const scrollY = document.body.style.top;
-                document.body.style.position = '';
-                document.body.style.width = '';
-                document.body.style.top = '';
-                window.scrollTo(0, parseInt(scrollY || '0') * -1);
-            }
-            
-            document.body.style.overflow = '';
+        this.leaderboardModal.classList.remove('show');
+        
+        if (this.isMobile) {
+            const scrollY = document.body.style.top;
+            document.body.style.position = '';
+            document.body.style.width = '';
+            document.body.style.top = '';
+            window.scrollTo(0, parseInt(scrollY || '0') * -1);
         }
+        
+        document.body.style.overflow = '';
     }
 
     maskPlayerName(name) {
@@ -401,47 +402,44 @@ class ImageMatchingGame {
             
             let scores = await response.json();
             
-            // 점수 내림차순, 점수가 같으면 시간 오름차순으로 정렬
             scores.sort((a, b) => {
                 if (b.score !== a.score) {
-                    return b.score - a.score; // 점수 내림차순
+                    return b.score - a.score;
                 }
-                return a.time_taken - b.time_taken; // 시간이 적은 순 (오름차순)
+                return a.time_taken - b.time_taken;
             });
 
             const tbody = document.querySelector('#scoresTable tbody');
-            if (tbody) {
-                tbody.innerHTML = '';
+            tbody.innerHTML = '';
+            
+            const medals = {
+                1: '🥇',
+                2: '🥈',
+                3: '🥉'
+            };
+            
+            scores.forEach((score, index) => {
+                const row = tbody.insertRow();
+                if (index < 3) {
+                    row.classList.add('top-three');
+                }
                 
-                const medals = {
-                    1: '🥇',
-                    2: '🥈',
-                    3: '🥉'
-                };
+                const rankCell = row.insertCell();
+                if (index < 3) {
+                    rankCell.innerHTML = `<span class="medal">${medals[index + 1]}</span>`;
+                } else {
+                    rankCell.innerHTML = `<span class="rank-number">${index + 1}</span>`;
+                }
                 
-                scores.forEach((score, index) => {
-                    const row = tbody.insertRow();
-                    if (index < 3) {
-                        row.classList.add('top-three');
-                    }
-                    
-                    const rankCell = row.insertCell();
-                    if (index < 3) {
-                        rankCell.innerHTML = `<span class="medal">${medals[index + 1]}</span>`;
-                    } else {
-                        rankCell.innerHTML = `<span class="rank-number">${index + 1}</span>`;
-                    }
-                    
-                    row.insertCell().textContent = score.player_name;
-                    row.insertCell().innerHTML = `<span class="highlight-score">${Math.floor(score.score)}</span>`;
-                    row.insertCell().textContent = score.difficulty;
-                    row.insertCell().textContent = `${score.time_taken}초`;
-                    
-                    if (index < 3) {
-                        row.style.backgroundColor = ['#fff9db', '#f8f9fa', '#f1f3f5'][index];
-                    }
-                });
-            }
+                row.insertCell().textContent = score.player_name;
+                row.insertCell().innerHTML = `<span class="highlight-score">${Math.floor(score.score)}</span>`;
+                row.insertCell().textContent = score.difficulty;
+                row.insertCell().textContent = `${score.time_taken}초`;
+                
+                if (index < 3) {
+                    row.style.backgroundColor = ['#fff9db', '#f8f9fa', '#f1f3f5'][index];
+                }
+            });
         } catch (error) {
             console.error('리더보드 업데이트 중 오류:', error);
             alert('리더보드 업데이트 중 오류가 발생했습니다.');
@@ -482,5 +480,4 @@ class ImageMatchingGame {
     }
 }
 
-// 게임 인스턴스 생성
 const game = new ImageMatchingGame();
