@@ -41,9 +41,11 @@ class ImageMatchingGame {
             const gameHeader = document.querySelector('.game-header');
             const gameBoard = document.querySelector('.game-board');
             if (gameHeader && gameBoard) {
-                const headerHeight = gameHeader.getBoundingClientRect().height;
-                const availableHeight = window.innerHeight - headerHeight - 20; // 여유 공간 20px
+                const headerRect = gameHeader.getBoundingClientRect();
+                const headerHeight = headerRect.height;
+                const availableHeight = window.innerHeight - headerHeight - 10; // 여유 공간 10px
                 gameBoard.style.maxHeight = `${availableHeight}px`;
+                console.log(`Header Height: ${headerHeight}px, Available Height: ${availableHeight}px`);
             }
         };
 
@@ -56,8 +58,8 @@ class ImageMatchingGame {
         this.playerNameInput = document.getElementById('playerName');
         this.difficultySelect = document.getElementById('difficulty');
         this.startButton = document.getElementById('startButton');
-        this.status = document.getElementById('status'); // statusLabel -> status
-        this.timer = document.getElementById('timer'); // timerLabel -> timer
+        this.status = document.getElementById('status');
+        this.timer = document.getElementById('timer');
         this.gameBoard = document.getElementById('gameBoard');
         this.leaderboardModal = document.getElementById('leaderboardModal');
         this.showLeaderboardButton = document.getElementById('showLeaderboard');
@@ -153,19 +155,11 @@ class ImageMatchingGame {
     }
 
     getGridColumns() {
-        if (this.isMobile) {
-            return {
-                'easy': 3,
-                'normal': 4,
-                'hard': 5
-            }[this.mode];
-        } else {
-            return {
-                'easy': 4,
-                'normal': 5,
-                'hard': 6
-            }[this.mode];
-        }
+        return {
+            'easy': 4, // 4열 (4x3)
+            'normal': 5, // 5열 (5x4)
+            'hard': 6 // 6열 (6x5)
+        }[this.mode];
     }
 
     async setupGameBoard() {
@@ -260,6 +254,8 @@ class ImageMatchingGame {
     initialize() {
         this.selectedCards = [];
         this.matchedCards = [];
+        clearInterval(this.timer); // 중복 타이머 방지
+        this.timer = null;
     }
 
     showCards(duration) {
@@ -322,7 +318,9 @@ class ImageMatchingGame {
     }
 
     startTimer() {
-        clearInterval(this.timer);
+        if (this.timer) {
+            clearInterval(this.timer); // 기존 타이머 제거
+        }
         this.timer = setInterval(() => {
             if (this.remainingTime > 0) {
                 this.remainingTime--;
