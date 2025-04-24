@@ -19,7 +19,7 @@ class ImageMatchingGame {
             this.addEventListeners();
             this.setupGameBoard();
             this.setViewportHeight();
-            this.setGameBoardHeight(); // 게임 보드 높이 설정 추가
+            this.setGameBoardHeight();
         });
     }
 
@@ -56,8 +56,8 @@ class ImageMatchingGame {
         this.playerNameInput = document.getElementById('playerName');
         this.difficultySelect = document.getElementById('difficulty');
         this.startButton = document.getElementById('startButton');
-        this.statusLabel = document.getElementById('status');
-        this.timerLabel = document.getElementById('timer');
+        this.status = document.getElementById('status'); // statusLabel -> status
+        this.timer = document.getElementById('timer'); // timerLabel -> timer
         this.gameBoard = document.getElementById('gameBoard');
         this.leaderboardModal = document.getElementById('leaderboardModal');
         this.showLeaderboardButton = document.getElementById('showLeaderboard');
@@ -141,7 +141,7 @@ class ImageMatchingGame {
         this.remainingTime = this.timeLimit;
         this.updateTimer();
         this.setupGameBoard();
-        this.setGameBoardHeight(); // 난이도 변경 시 높이 재설정
+        this.setGameBoardHeight();
     }
 
     getCardCount() {
@@ -181,7 +181,7 @@ class ImageMatchingGame {
             await this.preloadImages(imageNumbers);
         } catch (error) {
             console.error('이미지 프리로드 실패:', error);
-            this.statusLabel.textContent = '이미지 로드 중 오류가 발생했습니다.';
+            this.status.textContent = '이미지 로드 중 오류가 발생했습니다.';
             return;
         }
 
@@ -223,7 +223,7 @@ class ImageMatchingGame {
             this.gameBoard.appendChild(card);
         });
 
-        this.setGameBoardHeight(); // 게임 보드 생성 후 높이 재설정
+        this.setGameBoardHeight();
     }
 
     async startGame() {
@@ -234,7 +234,7 @@ class ImageMatchingGame {
         }
 
         if (!this.gameStarted) {
-            this.statusLabel.textContent = '이미지를 불러오는 중...';
+            this.status.textContent = '이미지를 불러오는 중...';
             try {
                 await this.setupGameBoard();
                 this.gameStartTime = Date.now();
@@ -244,7 +244,7 @@ class ImageMatchingGame {
                 this.difficultySelect.disabled = true;
                 this.playerNameInput.disabled = true;
                 
-                this.statusLabel.textContent = '10초 후 게임이 시작됩니다.';
+                this.status.textContent = '10초 후 게임이 시작됩니다.';
                 this.showCards(10000);
 
                 this.remainingTime = this.timeLimit;
@@ -252,7 +252,7 @@ class ImageMatchingGame {
                 this.startTimer();
             } catch (error) {
                 console.error('게임 시작 중 오류:', error);
-                this.statusLabel.textContent = '게임 시작 중 오류가 발생했습니다.';
+                this.status.textContent = '게임 시작 중 오류가 발생했습니다.';
             }
         }
     }
@@ -275,7 +275,7 @@ class ImageMatchingGame {
                 card.classList.remove('flipped');
             }
         });
-        this.statusLabel.textContent = '게임 시작!';
+        this.status.textContent = '게임 시작!';
     }
 
     flipCard(card, index) {
@@ -334,7 +334,7 @@ class ImageMatchingGame {
     }
 
     updateTimer() {
-        this.timerLabel.textContent = `남은 시간: ${this.remainingTime}초`;
+        this.timer.textContent = `남은 시간: ${this.remainingTime}초`;
     }
 
     calculateScore(success, timeTaken) {
@@ -468,7 +468,7 @@ class ImageMatchingGame {
         clearInterval(this.timer);
         this.gameStarted = false;
         this.saveScore(success).then(() => {
-            this.statusLabel.textContent = success ? 
+            this.status.textContent = success ? 
                 '게임 성공! 모든 카드를 맞췄습니다.' : 
                 '게임 실패! 시간이 초과되었습니다.';
             
@@ -494,7 +494,7 @@ class ImageMatchingGame {
         this.setupGameBoard();
         this.remainingTime = this.timeLimit;
         this.updateTimer();
-        this.statusLabel.textContent = '';
+        this.status.textContent = '';
     }
 }
 
