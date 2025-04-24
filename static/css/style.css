@@ -8,21 +8,25 @@ body {
     padding: 0;
     height: 100%;
     overflow-x: hidden;
-    -webkit-text-size-adjust: 100%;
-    touch-action: manipulation;
-    -webkit-overflow-scrolling: touch;
+    -webkit-text-size-adjust: 100%; /* 폰트 크기 자동 조정 방지 */
+    touch-action: manipulation; /* 더블 탭 확대 방지 */
 }
 
 html {
     height: 100%;
+    box-sizing: border-box;
+}
+
+*, *:before, *:after {
+    box-sizing: inherit;
 }
 
 /* 기본 컨테이너 및 컨트롤 */
 .game-container {
     width: 100%;
-    max-width: 1200px;
+    max-width: 900px;
     margin: 0 auto;
-    padding: clamp(4px, 2vw, 8px);
+    padding: 16px;
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
@@ -33,14 +37,14 @@ html {
     background: linear-gradient(to right, #f8f9fa, #ffffff);
     border-radius: 16px;
     padding: 16px;
-    margin-bottom: 12px;
+    margin-bottom: 16px;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
 
 .controls {
     display: flex;
-    gap: 12px;
-    margin-bottom: 8px;
+    gap: 16px;
+    margin-bottom: 16px;
     align-items: center;
     flex-wrap: wrap;
 }
@@ -52,7 +56,7 @@ html {
 
 /* 입력 필드 스타일 */
 .player-name-input {
-    width: 85%;
+    width: 100%;
     padding: 12px 16px;
     border: 2px solid #e2e8f0;
     border-radius: 12px;
@@ -103,6 +107,7 @@ html {
     display: inline-flex;
     align-items: center;
     gap: 8px;
+    white-space: nowrap;
 }
 
 .game-button:hover {
@@ -130,12 +135,16 @@ html {
     justify-content: space-between;
     align-items: center;
     margin-top: 16px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+    gap: 12px;
 }
 
 .status-text {
     font-size: 18px;
     font-weight: 500;
     color: #4f46e5;
+    flex: 1;
 }
 
 .time-display {
@@ -158,28 +167,31 @@ html {
 /* 게임 보드 */
 .game-board {
     display: grid;
-    gap: clamp(4px, 1vw, 6px);
+    gap: 12px;
     margin: 0 auto;
     width: 100%;
     flex: 1;
+    max-width: 100%;
     background: linear-gradient(to right, #f8f9fa, #ffffff);
     border-radius: 16px;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-    padding: clamp(6px, 2vw, 8px);
+    padding: 16px;
     box-sizing: border-box;
+    grid-auto-rows: 1fr;
 }
 
 /* 카드 스타일 */
 .card {
     width: 100%;
-    aspect-ratio: 1 / 1;
+    height: 0;
+    padding-bottom: 100%;
     position: relative;
     background-color: #e2e8f0;
     cursor: pointer;
     transition: all 0.3s ease;
-    border-radius: clamp(6px, 1.5vw, 8px);
+    border-radius: 12px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    touch-action: manipulation;
+    touch-action: manipulation; /* 확대 방지 */
 }
 
 .card:hover {
@@ -196,9 +208,8 @@ html {
     object-fit: cover;
     opacity: 0;
     visibility: hidden;
-    border-radius: clamp(6px, 1.5vw, 8px);
-    pointer-events: none;
-    transition: opacity 0.2s;
+    border-radius: 12px;
+    pointer-events: none; /* 이미지 클릭 방지 */
 }
 
 .card.flipped {
@@ -209,6 +220,7 @@ html {
 .card.flipped img {
     opacity: 1;
     visibility: visible;
+    transition: opacity 0.2s;
 }
 
 /* 리더보드 스타일 */
@@ -278,8 +290,8 @@ html {
 
 .modal-content {
     background-color: white;
-    margin: clamp(5%, 10vw, 10%) auto;
-    padding: clamp(16px, 4vw, 24px);
+    margin: 4% auto;
+    padding: 24px;
     border-radius: 16px;
     width: 90%;
     max-width: 600px;
@@ -322,103 +334,65 @@ html {
     color: #4f46e5;
 }
 
-/* 반응형 스타일 */
-@media (max-width: 479px) {
-    .controls {
-        flex-direction: column;
-        gap: 6px;
-    }
-    
-    .input-group {
-        width: 100%;
-    }
-    
-    .game-button {
-        width: 100%;
-        padding: 10px;
-        font-size: 14px;
+/* 더 세분화된 반응형 스타일 */
+/* 대형 모니터 */
+@media (min-width: 1200px) {
+    .game-board {
+        grid-template-columns: repeat(6, 1fr);
+        gap: 16px;
+        padding: 20px;
     }
     
     .game-container {
-        padding: 4px;
-        height: 100vh;
-        overflow: hidden;
+        padding: 24px;
     }
-    
-    .game-header {
-        padding: 12px;
-        margin-bottom: 8px;
-    }
-    
+}
+
+/* 데스크톱 */
+@media (min-width: 992px) and (max-width: 1199px) {
     .game-board {
-        grid-template-columns: repeat(3, 1fr);
-        gap: 4px;
-        padding: 4px;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 14px;
+    }
+}
+
+/* 태블릿 크게 */
+@media (min-width: 768px) and (max-width: 991px) {
+    .game-board {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 12px;
     }
     
-    .card {
-        border-radius: 6px;
+    .controls {
+        gap: 12px;
+    }
+    
+    .game-container {
+        padding: 16px;
+    }
+}
+
+/* 태블릿 작게 */
+@media (min-width: 576px) and (max-width: 767px) {
+    .game-board {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+        padding: 12px;
+    }
+    
+    .controls {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+    
+    .input-group {
+        flex: 1 0 calc(50% - 10px);
+    }
+    
+    .game-button {
+        flex: 1 0 calc(50% - 10px);
     }
     
     .game-status {
-        flex-direction: column;
-        gap: 8px;
-        align-items: stretch;
-    }
-    
-    .time-display {
-        width: 100%;
-        box-sizing: border-box;
-        text-align: center;
-        justify-content: center;
-    }
-    
-    .modal-content {
-        width: 95%;
-        padding: 12px;
-        margin: 5% auto;
-        max-height: 90vh;
-    }
-    
-    .modal-header h2 {
-        font-size: 20px;
-    }
-    
-    .modal .close {
-        font-size: 24px;
-    }
-    
-    #scoresTable th,
-    #scoresTable td {
-        padding: 10px 5px;
-        font-size: 14px;
-    }
-}
-
-@media (min-width: 480px) and (max-width: 767px) {
-    .game-board {
-        grid-template-columns: repeat(4, 1fr);
-        gap: 6px;
-        padding: 6px;
-    }
-    
-    .card {
-        border-radius: 8px;
-    }
-}
-
-@media (min-width: 768px) and (max-width: 1023px) {
-    .game-board {
-        grid-template-columns: repeat(5, 1fr);
-        gap: 8px;
-        padding: 8px;
-    }
-}
-
-@media (min-width: 1024px) {
-    .game-board {
-        grid-template-columns: repeat(6, 1fr);
-        gap: 10px;
-        padding: 10px;
-    }
-}
+        flex-direction
