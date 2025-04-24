@@ -161,15 +161,16 @@ html {
 /* 게임 보드 */
 .game-board {
     display: grid;
-    gap: clamp(4px, 1vw, 6px);
+    gap: clamp(3px, 1vw, 5px);
     margin: 0 auto;
     width: 100%;
     background: linear-gradient(to right, #f8f9fa, #ffffff);
     border-radius: 12px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-    padding: clamp(6px, 2vw, 8px);
+    padding: clamp(5px, 2vw, 7px);
     box-sizing: border-box;
     overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
 }
 
 /* 카드 스타일 */
@@ -180,7 +181,7 @@ html {
     background-color: #e2e8f0;
     cursor: pointer;
     transition: all 0.3s ease;
-    border-radius: clamp(6px, 1.5vw, 8px);
+    border-radius: clamp(5px, 1.5vw, 7px);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     touch-action: manipulation;
 }
@@ -199,7 +200,7 @@ html {
     object-fit: cover;
     opacity: 0;
     visibility: hidden;
-    border-radius: clamp(6px, 1.5vw, 8px);
+    border-radius: clamp(5px, 1.5vw, 7px);
     pointer-events: none;
     transition: opacity 0.2s;
 }
@@ -358,10 +359,10 @@ html {
     }
     
     .game-button {
-        padding: 5px 10px;
-        font-size: 12px;
-        border-radius: 5px;
-        gap: 3px;
+        padding: 4px 8px;
+        font-size: 11px;
+        border-radius: 4px;
+        gap: 2px;
     }
     
     .game-container {
@@ -377,14 +378,14 @@ html {
     }
     
     .game-board {
-        gap: 3px;
-        padding: 3px;
+        gap: 2px;
+        padding: 2px;
         border-radius: 8px;
         overflow-y: auto;
     }
     
     .card {
-        border-radius: 5px;
+        border-radius: 4px;
     }
     
     .game-status {
@@ -395,47 +396,47 @@ html {
     }
     
     .status-text {
-        font-size: 12px;
+        font-size: 11px;
     }
     
     .time-display {
-        width: 50%;
+        width: 40%;
         box-sizing: border-box;
         text-align: center;
         justify-content: center;
-        padding: 5px 10px;
-        font-size: 12px;
-        border-radius: 5px;
-        gap: 3px;
+        padding: 4px 8px;
+        font-size: 11px;
+        border-radius: 4px;
+        gap: 2px;
     }
     
     .time-display::before {
-        font-size: 12px;
+        font-size: 11px;
     }
     
     .player-name-input {
         width: 100%;
-        padding: 5px 8px;
-        font-size: 12px;
-        border-radius: 5px;
+        padding: 4px 6px;
+        font-size: 11px;
+        border-radius: 4px;
         border-width: 1px;
     }
     
     .player-name-input:focus {
-        box-shadow: 0 0 0 1.5px rgba(79, 70, 229, 0.15);
+        box-shadow: 0 0 0 1px rgba(79, 70, 229, 0.15);
     }
     
     .difficulty-select {
-        padding: 5px 20px 5px 8px;
-        font-size: 12px;
-        border-radius: 5px;
+        padding: 4px 18px 4px 6px;
+        font-size: 11px;
+        border-radius: 4px;
         border-width: 1px;
-        background-position: right 5px center;
-        background-size: 10px;
+        background-position: right 4px center;
+        background-size: 9px;
     }
     
     .difficulty-select:focus {
-        box-shadow: 0 0 0 1.5px rgba(79, 70, 229, 0.15);
+        box-shadow: 0 0 0 1px rgba(79, 70, 229, 0.15);
     }
     
     .modal-content {
@@ -463,26 +464,26 @@ html {
 
 @media (min-width: 480px) and (max-width: 767px) {
     .game-board {
-        gap: 5px;
-        padding: 5px;
+        gap: 4px;
+        padding: 4px;
         overflow-y: auto;
     }
     
     .card {
-        border-radius: 6px;
+        border-radius: 5px;
     }
 }
 
 @media (min-width: 768px) and (max-width: 1023px) {
     .game-board {
-        gap: 6px;
-        padding: 6px;
+        gap: 5px;
+        padding: 5px;
     }
 }
 
 @media (min-width: 1024px) {
     .game-board {
-        gap: 8px;
-        padding: 8px;
+        gap: 6px;
+        padding: 6px;
     }
 }
