@@ -18,7 +18,8 @@ class ImageMatchingGame {
             this.initializeElements();
             this.addEventListeners();
             this.setupGameBoard();
-            this.setViewportHeight(); // 뷰포트 높이 설정 추가
+            this.setViewportHeight();
+            this.setGameBoardHeight(); // 게임 보드 높이 설정 추가
         });
     }
 
@@ -29,12 +30,26 @@ class ImageMatchingGame {
             document.documentElement.style.setProperty('--vh', `${vh}px`);
         };
 
-        // 초기 설정
         setVh();
-
-        // 창 크기 변경 시 업데이트
         window.addEventListener('resize', setVh);
         window.addEventListener('orientationchange', setVh);
+    }
+
+    // 게임 보드의 최대 높이를 동적으로 설정
+    setGameBoardHeight() {
+        const setHeight = () => {
+            const gameHeader = document.querySelector('.game-header');
+            const gameBoard = document.querySelector('.game-board');
+            if (gameHeader && gameBoard) {
+                const headerHeight = gameHeader.getBoundingClientRect().height;
+                const availableHeight = window.innerHeight - headerHeight - 20; // 여유 공간 20px
+                gameBoard.style.maxHeight = `${availableHeight}px`;
+            }
+        };
+
+        setHeight();
+        window.addEventListener('resize', setHeight);
+        window.addEventListener('orientationchange', setHeight);
     }
 
     initializeElements() {
@@ -126,6 +141,7 @@ class ImageMatchingGame {
         this.remainingTime = this.timeLimit;
         this.updateTimer();
         this.setupGameBoard();
+        this.setGameBoardHeight(); // 난이도 변경 시 높이 재설정
     }
 
     getCardCount() {
@@ -206,6 +222,8 @@ class ImageMatchingGame {
             
             this.gameBoard.appendChild(card);
         });
+
+        this.setGameBoardHeight(); // 게임 보드 생성 후 높이 재설정
     }
 
     async startGame() {
