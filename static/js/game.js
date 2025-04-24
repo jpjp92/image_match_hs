@@ -14,31 +14,10 @@ class ImageMatchingGame {
         this.isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
         this.touchStartY = 0;
         
-        // 화면 크기에 따른 처리
-        this.resizeObserver = null;
-        
         document.addEventListener('DOMContentLoaded', () => {
             this.initializeElements();
             this.addEventListeners();
             this.setupGameBoard();
-            this.setupResizeObserver();
-            
-            // 초기 타이머 표시
-            this.updateTimer();
-            
-            // 모바일에서 더블탭 확대 방지
-            document.addEventListener('touchstart', function(event) {
-                if (event.touches.length > 1) {
-                    event.preventDefault();
-                }
-            }, { passive: false });
-            
-            // 핀치 줌 방지
-            document.addEventListener('touchmove', function(event) {
-                if (event.scale !== 1) {
-                    event.preventDefault();
-                }
-            }, { passive: false });
         });
     }
 
@@ -53,6 +32,7 @@ class ImageMatchingGame {
         this.showLeaderboardButton = document.getElementById('showLeaderboard');
         this.closeButton = document.querySelector('.close');
         
+        // 닫기 버튼 표시 설정
         if (this.closeButton) {
             this.closeButton.style.display = 'block';
         }
@@ -64,10 +44,28 @@ class ImageMatchingGame {
         this.showLeaderboardButton.addEventListener('click', () => this.showLeaderboard());
         this.closeButton.addEventListener('click', () => this.hideLeaderboard());
         
+        // 전체 문서에 확대/축소 방지 이벤트 추가
+        document.addEventListener('touchmove', function(e) {
+            if (!e.target.closest('.modal-content')) {
+                e.preventDefault();
+            }
+        }, { passive: false });
+        
+        // 더블 탭 확대 방지
+        document.addEventListener('touchend', function(e) {
+            const now = Date.now();
+            const DOUBLE_PRESS_DELAY = 300;
+            if (this.lastTap && (now - this.lastTap) < DOUBLE_PRESS_DELAY) {
+                e.preventDefault();
+            }
+            this.lastTap = now;
+        }.bind(this), false);
+        
+        // 모바일 터치 이벤트
         if (this.isMobile) {
             this.leaderboardModal.addEventListener('touchstart', (e) => {
                 this.touchStartY = e.touches[0].clientY;
-            }, { passive: true });
+            });
 
             this.leaderboardModal.addEventListener('touchmove', (e) => {
                 const touchEndY = e.touches[0].clientY;
@@ -78,50 +76,16 @@ class ImageMatchingGame {
                         this.hideLeaderboard();
                     }
                 }
-            }, { passive: true });
+            });
         }
 
+        // 모달 외부 클릭/터치 이벤트
         this.leaderboardModal.addEventListener(this.isMobile ? 'touchend' : 'click', (e) => {
             const modalContent = this.leaderboardModal.querySelector('.modal-content');
             if (e.target === this.leaderboardModal && !modalContent.contains(e.target)) {
                 this.hideLeaderboard();
             }
         });
-        
-        window.addEventListener('orientationchange', () => {
-            setTimeout(() => {
-                this.adjustGameBoardLayout();
-            }, 200);
-        });
-    }
-    
-    setupResizeObserver() {
-        if (window.ResizeObserver) {
-            this.resizeObserver = new ResizeObserver(() => {
-                this.adjustGameBoardLayout();
-            });
-            this.resizeObserver.observe(this.gameBoard);
-        } else {
-            window.addEventListener('resize', () => {
-                this.adjustGameBoardLayout();
-            });
-        }
-    }
-    
-    adjustGameBoardLayout() {
-        const cardCount = this.getCardCount();
-        const columns = this.getGridColumns();
-
-        this.gameBoard.style.gridTemplateColumns = `repeat(${columns}, 1fr)`;
-
-        const rows = Math.ceil(cardCount / columns);
-        const cards = document.querySelectorAll('.card');
-        cards.forEach(card => {
-            card.style.height = 'auto';
-            card.style.aspectRatio = '1 / 1';
-        });
-
-        console.log(`Mode: ${this.mode}, Columns: ${columns}, Rows: ${rows}, Cards: ${cardCount}`);
     }
 
     preloadImages(imageNumbers) {
@@ -155,18 +119,26 @@ class ImageMatchingGame {
 
     getCardCount() {
         return {
-            'easy': 12, // 4x3
-            'normal': 20, // 5x4
-            'hard': 30 // 6x5
+            'easy': 12,
+            'normal': 20,
+            'hard': 30
         }[this.mode];
     }
 
     getGridColumns() {
-        return {
-            'easy': 4, // 4x3
-            'normal': 5, // 5x4
-            'hard': 6 // 6x5
-        }[this.mode];
+        if (this.isMobile) {
+            return {
+                'easy': 3,
+                'normal': 4,
+                'hard': 5
+            }[this.mode];
+        } else {
+            return {
+                'easy': 4,
+                'normal': 5,
+                'hard': 6
+            }[this.mode];
+        }
     }
 
     async setupGameBoard() {
@@ -186,7 +158,7 @@ class ImageMatchingGame {
             return;
         }
 
-        let images = imageNumbers.flatMap(n => [`/static/images/${n}.jpg`, `/static/images/${n}.jpg`]);
+        let images = imageNumbers.flatMap(n => [`/static/images/${n}.jpg`, `//static/images/${n}.jpg`]);
         this.shuffleArray(images);
 
         const gridColumns = this.getGridColumns();
@@ -196,7 +168,6 @@ class ImageMatchingGame {
             const card = document.createElement('div');
             card.className = 'card';
             card.dataset.index = index;
-            card.setAttribute('aria-label', `카드 ${index + 1}`);
             
             const cachedImg = this.preloadedImages.get(img)?.cloneNode() || document.createElement('img');
             if (!this.preloadedImages.has(img)) {
@@ -209,20 +180,19 @@ class ImageMatchingGame {
             
             card.appendChild(cachedImg);
             
-            if (this.isMobile) {
-                card.addEventListener('touchend', (e) => {
-                    e.preventDefault();
-                    this.flipCard(card, index);
-                });
-            } else {
-                card.addEventListener('click', () => this.flipCard(card, index));
-            }
+            // 터치/클릭 이벤트 통합 처리
+            const handleCardInteraction = (e) => {
+                e.preventDefault();
+                if (!this.gameStarted) return;
+                this.flipCard(card, index);
+            };
+            
+            // 모바일과 데스크톱 모두 이벤트 리스너 추가
+            card.addEventListener('click', handleCardInteraction);
+            card.addEventListener('touchend', handleCardInteraction, { passive: false });
             
             this.gameBoard.appendChild(card);
         });
-        
-        this.adjustGameBoardLayout();
-        console.log(`Setup complete - Mode: ${this.mode}, Columns: ${gridColumns}, Cards: ${numCards}`);
     }
 
     async startGame() {
@@ -345,12 +315,15 @@ class ImageMatchingGame {
             'hard': 2.0
         }[this.mode];
         
-        return (baseScore - timePenalty) * difficultyMultiplier;
+        return (baseScore - timePenalty) * difficultyMultiplier; // 소수점 유지
     }
     
     async saveScore(success) {
         const timeTaken = Math.floor((Date.now() - this.gameStartTime) / 1000);
+        // const score = this.calculateScore(success, timeTaken);
         let score = this.calculateScore(success, timeTaken);
+    
+        // 점수를 반올림하여 정수로 변환
         score = Math.round(score);
         try {
             const response = await fetch('/api/scores', {
@@ -382,6 +355,7 @@ class ImageMatchingGame {
             this.leaderboardModal.classList.add('show');
             document.body.style.overflow = 'hidden';
             
+            // 모바일 스크롤 방지
             if (this.isMobile) {
                 document.body.style.position = 'fixed';
                 document.body.style.width = '100%';
@@ -393,6 +367,7 @@ class ImageMatchingGame {
     hideLeaderboard() {
         this.leaderboardModal.classList.remove('show');
         
+        // 모바일 스크롤 복원
         if (this.isMobile) {
             const scrollY = document.body.style.top;
             document.body.style.position = '';
@@ -418,11 +393,12 @@ class ImageMatchingGame {
             
             let scores = await response.json();
             
+            // 점수 내림차순, 점수가 같으면 시간 오름차순으로 정렬
             scores.sort((a, b) => {
                 if (b.score !== a.score) {
-                    return b.score - a.score;
+                    return b.score - a.score; // 점수 내림차순
                 }
-                return a.time_taken - b.time_taken;
+                return a.time_taken - b.time_taken; // 시간이 적은 순 (오름차순)
             });
 
             const tbody = document.querySelector('#scoresTable tbody');
@@ -448,7 +424,7 @@ class ImageMatchingGame {
                 }
                 
                 row.insertCell().textContent = score.player_name;
-                row.insertCell().innerHTML = `<span class="highlight-score">${Math.floor(score.score)}</span>`;
+                row.insertCell().innerHTML = `<span class="highlight-score">${Math.floor(score.score)}</span>`; // 표시할 때만 소수점 제거
                 row.insertCell().textContent = score.difficulty;
                 row.insertCell().textContent = `${score.time_taken}초`;
                 
@@ -496,4 +472,5 @@ class ImageMatchingGame {
     }
 }
 
+// 게임 인스턴스 생성
 const game = new ImageMatchingGame();
