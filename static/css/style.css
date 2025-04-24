@@ -26,7 +26,7 @@ html {
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
-    min-height: calc(var(--vh, 1vh) * 100); /* 뷰포트 높이 동적 설정 */
+    min-height: calc(var(--vh, 1vh) * 100);
 }
 
 .game-header {
@@ -166,7 +166,7 @@ html {
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
     padding: clamp(6px, 2vw, 8px);
     box-sizing: border-box;
-    overflow-y: auto; /* 스크롤 가능하도록 설정 */
+    overflow-y: auto;
 }
 
 /* 카드 스타일 */
@@ -331,31 +331,31 @@ html {
     
     .input-group {
         width: 100%;
+        min-width: 0; /* 모바일에서 더 유연하게 */
     }
     
     .game-button {
         width: 100%;
-        padding: 10px;
-        font-size: 14px;
+        padding: 8px 16px; /* 패딩 줄임 */
+        font-size: 14px; /* 폰트 크기 줄임 */
     }
     
     .game-container {
         padding: 4px;
-        min-height: calc(var(--vh, 1vh) * 100); /* 동적 뷰포트 높이 */
-        overflow-y: auto; /* 스크롤 가능 */
+        min-height: calc(var(--vh, 1vh) * 100);
+        overflow-y: auto;
     }
     
     .game-header {
-        padding: 12px;
-        margin-bottom: 8px;
+        padding: 8px; /* 패딩 줄임 */
+        margin-bottom: 6px; /* 마진 줄임 */
     }
     
     .game-board {
-        grid-template-columns: repeat(4, 1fr); /* normal 모드에서 4열 */
+        grid-template-columns: repeat(4, 1fr);
         gap: 4px;
         padding: 4px;
-        max-height: calc(var(--vh, 1vh) * 60); /* 게임 보드 높이 제한 */
-        overflow-y: auto; /* 스크롤 가능 */
+        overflow-y: auto;
     }
     
     .card {
@@ -364,8 +364,13 @@ html {
     
     .game-status {
         flex-direction: column;
-        gap: 8px;
+        gap: 6px; /* 간격 줄임 */
         align-items: stretch;
+        margin-top: 8px; /* 마진 줄임 */
+    }
+    
+    .status-text {
+        font-size: 14px; /* 폰트 크기 줄임 */
     }
     
     .time-display {
@@ -373,6 +378,27 @@ html {
         box-sizing: border-box;
         text-align: center;
         justify-content: center;
+        padding: 8px 16px; /* 패딩 줄임 */
+        font-size: 14px; /* 폰트 크기 줄임 */
+    }
+    
+    .time-display::before {
+        font-size: 16px; /* 아이콘 크기 줄임 */
+    }
+    
+    .player-name-input {
+        width: 100%; /* 전체 너비 유지 */
+        padding: 8px 12px; /* 패딩 줄임 */
+        font-size: 14px; /* 폰트 크기 줄임 */
+        border-radius: 8px; /* 테두리 반경 줄임 */
+    }
+    
+    .difficulty-select {
+        padding: 8px 28px 8px 12px; /* 패딩 조정 */
+        font-size: 14px; /* 폰트 크기 줄임 */
+        border-radius: 8px; /* 테두리 반경 줄임 */
+        background-position: right 8px center; /* 드롭다운 아이콘 위치 조정 */
+        background-size: 14px; /* 드롭다운 아이콘 크기 줄임 */
     }
     
     .modal-content {
@@ -402,7 +428,6 @@ html {
         grid-template-columns: repeat(4, 1fr);
         gap: 6px;
         padding: 6px;
-        max-height: calc(var(--vh, 1vh) * 70);
         overflow-y: auto;
     }
     
