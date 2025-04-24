@@ -4,25 +4,32 @@ body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     color: #1e293b;
     line-height: 1.5;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    overflow-x: hidden;
 }
 
 /* 기본 컨테이너 및 컨트롤 */
 .game-container {
     max-width: 900px;
-    margin: 0.5rem auto 0;
-    padding: 0 16px;
-   
-/*     min-height: 50vh; /* 최소 높이를 화면의 60%로 설정 */ */
-    max-height: 50vh; /* 최대 높이 제한 */
-    gap: 0.5rem; /* 컴포넌트 간격 줄임 */
+    width: 100%;
+    margin: 0 auto;
+    padding: 1rem;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
 
 .game-header {
     background: linear-gradient(to right, #f8f9fa, #ffffff);
     border-radius: 16px;
-    padding: 24px;
-    margin-bottom: 24px;
+    padding: 16px;
+    margin-bottom: 16px;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .controls {
@@ -38,16 +45,16 @@ body {
     min-width: 200px;
 }
 
-
 /* 입력 필드 스타일 */
 .player-name-input {
-    width: 85%;
+    width: 100%;
     padding: 12px 16px;
     border: 2px solid #e2e8f0;
     border-radius: 12px;
     font-size: 16px;
     transition: all 0.2s ease;
     background-color: white;
+    box-sizing: border-box;
 }
 
 .player-name-input:focus {
@@ -70,6 +77,7 @@ body {
     background-repeat: no-repeat;
     background-position: right 12px center;
     background-size: 16px;
+    box-sizing: border-box;
 }
 
 .difficulty-select:focus {
@@ -119,6 +127,8 @@ body {
     justify-content: space-between;
     align-items: center;
     margin-top: 16px;
+    flex-wrap: wrap;
+    gap: 10px;
 }
 
 .status-text {
@@ -130,10 +140,10 @@ body {
 .time-display {
     background: #4f46e5;
     color: white;
-    padding: 12px 24px;
+    padding: 8px 16px;
     border-radius: 12px;
     font-weight: 600;
-    font-size: 18px;
+    font-size: 16px;
     display: inline-flex;
     align-items: center;
     gap: 8px;
@@ -141,21 +151,22 @@ body {
 
 .time-display::before {
     content: "⏱";
-    font-size: 20px;
+    font-size: 18px;
 }
 
 /* 게임 보드 */
 .game-board {
     display: grid;
     gap: 12px;
-    margin: 0 auto;
-    max-width: 900px;
-    margin-bottom: 0;
+    width: 100%;
+    flex: 1;
     padding: 16px;
     background: linear-gradient(to right, #f8f9fa, #ffffff);
     border-radius: 16px;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-    flex:1 ;  /* 추가 */
+    box-sizing: border-box;
+    margin-bottom: 16px;
+    align-content: start;
 }
 
 /* 카드 스타일 */
@@ -256,6 +267,7 @@ body {
     background-color: rgba(0, 0, 0, 0.5);
     opacity: 0;
     transition: opacity 0.3s ease-in-out;
+    overflow-y: auto;
 }
 
 .modal.show {
@@ -274,6 +286,10 @@ body {
     transform: translateY(-20px);
     transition: transform 0.3s ease-in-out;
     box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+.modal.show .modal-content {
+    transform: translateY(0);
 }
 
 .modal-header {
@@ -316,23 +332,29 @@ body {
     .game-button {
         width: 100%;
     }
-    .game-container {
-        margin: 0 auto;      /* 중앙 정렬 */
-        padding: 1px;
-        min-height: 100vh;
-        justify-content: space-between;
+    
+    .game-header {
+        padding: 12px;
     }
+    
+    .game-status {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .time-display {
+        align-self: flex-end;
+    }
+    
     .game-board {
-        grid-template-columns: repeat(3, 1fr);
-        gap: 4px;
-        margin: 0 auto;      /* 중앙 정렬 */
-        min-height: 100vh;
-        padding: 1px;
+        padding: 8px;
+        gap: 8px;
     }
     
     .modal-content {
-        margin: 5% auto;
+        width: 95%;
         padding: 16px;
+        margin: 10% auto;
     }
     
     #scoresTable {
@@ -341,18 +363,30 @@ body {
     
     #scoresTable td,
     #scoresTable th {
-        padding: 10px 6px;
+        padding: 8px 4px;
     }
 }
 
-@media (min-width: 768px) and (max-width: 881px) {
+@media (max-width: 480px) {
     .game-board {
-        grid-template-columns: repeat(4, 1fr);
+        grid-template-columns: repeat(3, 1fr) !important;
     }
 }
 
-@media (min-width: 882px) {
+@media (min-width: 481px) and (max-width: 767px) {
     .game-board {
-        grid-template-columns: repeat(5, 1fr);
+        grid-template-columns: repeat(4, 1fr) !important;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+    .game-board {
+        grid-template-columns: repeat(4, 1fr) !important;
+    }
+}
+
+@media (min-width: 992px) {
+    .game-board {
+        grid-template-columns: repeat(5, 1fr) !important;
     }
 }
