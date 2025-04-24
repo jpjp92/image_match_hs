@@ -331,13 +331,13 @@ html {
     
     .input-group {
         width: 100%;
-        min-width: 0; /* 모바일에서 더 유연하게 */
+        min-width: 0;
     }
     
     .game-button {
         width: 100%;
-        padding: 8px 16px; /* 패딩 줄임 */
-        font-size: 14px; /* 폰트 크기 줄임 */
+        padding: 8px 16px;
+        font-size: 14px;
     }
     
     .game-container {
@@ -347,8 +347,8 @@ html {
     }
     
     .game-header {
-        padding: 8px; /* 패딩 줄임 */
-        margin-bottom: 6px; /* 마진 줄임 */
+        padding: 8px;
+        margin-bottom: 6px;
     }
     
     .game-board {
@@ -364,13 +364,13 @@ html {
     
     .game-status {
         flex-direction: column;
-        gap: 6px; /* 간격 줄임 */
+        gap: 6px;
         align-items: stretch;
-        margin-top: 8px; /* 마진 줄임 */
+        margin-top: 8px;
     }
     
     .status-text {
-        font-size: 14px; /* 폰트 크기 줄임 */
+        font-size: 14px;
     }
     
     .time-display {
@@ -378,27 +378,27 @@ html {
         box-sizing: border-box;
         text-align: center;
         justify-content: center;
-        padding: 8px 16px; /* 패딩 줄임 */
-        font-size: 14px; /* 폰트 크기 줄임 */
+        padding: 8px 16px;
+        font-size: 14px;
     }
     
     .time-display::before {
-        font-size: 16px; /* 아이콘 크기 줄임 */
+        font-size: 16px;
     }
     
     .player-name-input {
-        width: 100%; /* 전체 너비 유지 */
-        padding: 8px 12px; /* 패딩 줄임 */
-        font-size: 14px; /* 폰트 크기 줄임 */
-        border-radius: 8px; /* 테두리 반경 줄임 */
+        width: 100%;
+        padding: 8px 12px;
+        font-size: 14px;
+        border-radius: 8px;
     }
     
     .difficulty-select {
-        padding: 8px 28px 8px 12px; /* 패딩 조정 */
-        font-size: 14px; /* 폰트 크기 줄임 */
-        border-radius: 8px; /* 테두리 반경 줄임 */
-        background-position: right 8px center; /* 드롭다운 아이콘 위치 조정 */
-        background-size: 14px; /* 드롭다운 아이콘 크기 줄임 */
+        padding: 8px 28px 8px 12px;
+        font-size: 14px;
+        border-radius: 8px;
+        background-position: right 8px center;
+        background-size: 14px;
     }
     
     .modal-content {
